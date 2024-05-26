@@ -11,7 +11,7 @@
 int screenWidth = 800;
 int screenHeight = 450;
 const int numberOfEnemy = 10;
-float gameSpeed = 0.115f;
+float gameSpeed = 0.005f;
 float rectWidth = 20.0f;
 float rectHeight = 20.0f;
 
@@ -47,7 +47,7 @@ void UpdatePlayerPosition(float &currentxPosition, float &currentyPosition)
     }
 }
 
-void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float * enemyYPosition,float playerXPosition, float playerYPosition )
+void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float* enemyYPosition,float playerXPosition, float playerYPosition )
 {
     for (int i = 0; i < numberOfEnemy; i++)
     {
@@ -58,8 +58,9 @@ void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float * enemy
         
         enemyToPlayerX /= length;
         enemyToPlayerY /= length;
-        enemyXPosition[i] = enemyToPlayerX;
-        enemyYPosition[i] = enemyToPlayerY;
+
+        enemyXPosition[i] += enemyToPlayerX * gameSpeed;
+        enemyYPosition[i] += enemyToPlayerY * gameSpeed;
  
     }
 }
@@ -105,14 +106,15 @@ int main()
                 window.close();
         }
         UpdatePlayerPosition(playerXPosition, playerYPosition);
-        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, playerXPosition, playerYPosition);
-
         player.setPosition(sf::Vector2f(playerXPosition, playerYPosition));
-
+        
+        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, playerXPosition, playerYPosition);
+        
         window.clear();
         window.draw(player);
         for (int i = 0; i < numberOfEnemy; i++)
         {
+            enemies[i].setPosition(sf::Vector2f(enemyXPosition[i], enemyYPosition[i]));
             window.draw(enemies[i]);
         }
         window.display();
