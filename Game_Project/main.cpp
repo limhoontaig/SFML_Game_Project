@@ -1,41 +1,65 @@
 ﻿#include <SFML/Graphics.hpp>
+#include <iostream>
+
+int screenWidth = 800;
+int screenHeight = 450;
+float gameSpeed = 0.115f;
+float rectWidth = 20.0f;
+float rectHeight = 20.0f;
+
+void UpdatePosition(float* currentxPosition, float* currentyPosition)
+{
+    bool pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+    bool pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+    bool pressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+    bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+    if (pressedLeft)
+    {
+        *currentxPosition -= gameSpeed;
+        if (*currentxPosition <= 0)
+            *currentxPosition = 0.0;
+    }
+    if (pressedRight)
+    {
+        *currentxPosition += gameSpeed;
+        if (*currentxPosition >= screenWidth - rectWidth)
+            *currentxPosition = screenWidth - rectWidth;
+    }
+    if (pressedUp)
+    {
+        *currentyPosition -= gameSpeed;
+        if (*currentyPosition <= 0)
+            *currentyPosition = 0.0;
+    }
+    if (pressedDown)
+    {
+        *currentyPosition += gameSpeed;
+        if (*currentyPosition >= screenHeight - rectHeight)
+            *currentyPosition = screenHeight - rectHeight;
+    }
+    //return currentxPosition;
+}
+/*
+float UpdateYPosition(float currentyPosition)
+{
+    return currentyPosition;
+}
+*/
 
 int main()
 {
-    int screenWidth = 800;
-    int screenHeight = 450;
+    sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Game");
+    
+    sf::RectangleShape player;
+    sf::CircleShape circle[5];
+    
+    float rectXPosition = 50.0f;
+    float rectYPosition = 50.0f;
 
-    sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "02_Array_Loop_Condition");
-    sf::RectangleShape rect;
-
-    const int numRect = 30;
-    // sf::RectangleShape rects[numRect];
-    float xPos[numRect];
-    float yPos[numRect];
-    sf::Color color[numRect];
-    float speed[numRect];
-
-    float rectWidth[numRect]; // = 20.0f;
-    float rectHeight[numRect];// = 20.0f;
-
-    for (int i = 0; i < numRect; i++)
-    {
-        float randomX = rand() % screenWidth;
-        float randomY = rand() % screenHeight;
-        unsigned int randomR = rand() % 255;
-        unsigned int randomG = rand() % 255;
-        unsigned int randomB = rand() % 255;
-        xPos[i] = randomX;
-        yPos[i] = randomY;
-        rectWidth[i] = rand() % 40 + 10;
-        rectHeight[i] = rand() % 40 + 10;
-        speed[i] = (rand() % 10) * 0.005f;
-        color[i] = sf::Color(randomR, randomG, randomB);
-        //rects[i] = sf::RectangleShape(sf::Vector2f{ rectWidth, rectHeight });
-        //rects[i].setFillColor(randomColor);
-        //rects[i].setPosition(sf::Vector2f{ randomX, randomY });
-    }
-
+    player.setSize(sf::Vector2f(rectWidth, rectHeight));
+    player.setPosition(sf::Vector2f(rectXPosition, rectYPosition));
+    player.setFillColor(sf::Color::Red);
+    
     while (window.isOpen())
     {
         sf::Event event;
@@ -44,28 +68,12 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        UpdatePosition(&rectXPosition, &rectYPosition);
 
-        for (int i = 0; i < numRect; i++)
-        {
-            xPos[i] += speed[i];
-            if (xPos[i] == screenWidth)
-
-            //sf::Vector2f pos = rects[i].getPosition();
-            //pos.x += 0.005f;
-            //rects[i].setPosition(pos);
-        }
+        player.setPosition(sf::Vector2f(rectXPosition, rectYPosition));
 
         window.clear();
-
-        for (int i = 0; i < numRect; i++)
-        {
-            rect.setPosition(sf::Vector2f(xPos[i], yPos[i]));
-            rect.setFillColor(color[i]);
-            rect.setSize(sf::Vector2f(rectWidth[i], rectHeight[i]));
-            window.draw(rect);
-            //window.draw(rects[i]);
-        }
-
+        window.draw(player);
         window.display();
     }
 
