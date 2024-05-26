@@ -3,11 +3,12 @@
 
 int screenWidth = 800;
 int screenHeight = 450;
+const int numberOfEnemy = 10;
 float gameSpeed = 0.115f;
 float rectWidth = 20.0f;
 float rectHeight = 20.0f;
 
-void UpdatePosition(float* currentxPosition, float* currentyPosition)
+void UpdatePosition(float &currentxPosition, float &currentyPosition)
 {
     bool pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
     bool pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
@@ -15,44 +16,53 @@ void UpdatePosition(float* currentxPosition, float* currentyPosition)
     bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
     if (pressedLeft)
     {
-        *currentxPosition -= gameSpeed;
-        if (*currentxPosition <= 0)
-            *currentxPosition = 0.0;
+        currentxPosition -= gameSpeed;
+        if (currentxPosition <= 0)
+            currentxPosition = 0.0;
     }
     if (pressedRight)
     {
-        *currentxPosition += gameSpeed;
-        if (*currentxPosition >= screenWidth - rectWidth)
-            *currentxPosition = screenWidth - rectWidth;
+        currentxPosition += gameSpeed;
+        if (currentxPosition >= screenWidth - rectWidth)
+            currentxPosition = screenWidth - rectWidth;
     }
     if (pressedUp)
     {
-        *currentyPosition -= gameSpeed;
-        if (*currentyPosition <= 0)
-            *currentyPosition = 0.0;
+        currentyPosition -= gameSpeed;
+        if (currentyPosition <= 0)
+            currentyPosition = 0.0;
     }
     if (pressedDown)
     {
-        *currentyPosition += gameSpeed;
-        if (*currentyPosition >= screenHeight - rectHeight)
-            *currentyPosition = screenHeight - rectHeight;
+        currentyPosition += gameSpeed;
+        if (currentyPosition >= screenHeight - rectHeight)
+            currentyPosition = screenHeight - rectHeight;
     }
-    //return currentxPosition;
 }
-/*
-float UpdateYPosition(float currentyPosition)
-{
-    return currentyPosition;
-}
-*/
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Game");
     
     sf::RectangleShape player;
-    sf::CircleShape circle[5];
-    
+    float enemyXPosition[numberOfEnemy];
+    float enemyYPosition[numberOfEnemy];
+    const float enemySize = 10.0f;
+    const sf::Color enemyColor = { 155, 100, 155 };
+    sf::CircleShape enemies[numberOfEnemy];
+    for (int i = 0; i < numberOfEnemy; i++)
+    {
+        enemyXPosition[i] = screenWidth - 100;
+        enemyYPosition[i] = rand() % screenHeight;
+        enemies[i] = sf::CircleShape(enemySize);
+        enemies[i].setPosition(sf::Vector2f(enemyXPosition[i], enemyYPosition[i]));
+        enemies[i].setRadius(enemySize);
+        enemies[i].setFillColor(enemyColor);
+        enemies[i].setOutlineColor(sf::Color::Red);
+        enemies[i].setOutlineThickness(3.0f);
+    }
+
+
     float rectXPosition = 50.0f;
     float rectYPosition = 50.0f;
 
@@ -68,20 +78,18 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        UpdatePosition(&rectXPosition, &rectYPosition);
+        UpdatePosition(rectXPosition, rectYPosition);
 
         player.setPosition(sf::Vector2f(rectXPosition, rectYPosition));
 
         window.clear();
         window.draw(player);
+        for (int i = 0; i < numberOfEnemy; i++)
+        {
+            window.draw(enemies[i]);
+        }
         window.display();
     }
 
     return 0;
 }
-
-//--- Practice
-
-// 1. 각 사각형의 크기도 랜덤하게 생성되도록 코드를 수정해 보세요.
-// 2. 모든 사각형의 이동속도가 동일합니다. 각 사각형이 서로 다른 이동속도를 가지도록 수정해 보세요.
-// 3. 사각형이 오른쪽 끝에 부딪히면 반대 방향으로 움직이도록 수정해 보세요.
