@@ -53,6 +53,14 @@ void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float * enemy
     {
         float enemyToPlayerX = playerXPosition - enemyXPosition[i];
         float enemyToPlayerY = playerYPosition - enemyYPosition[i];
+
+        float length = sqrt(enemyToPlayerX * enemyToPlayerX + enemyToPlayerY * enemyToPlayerY);
+        
+        enemyToPlayerX /= length;
+        enemyToPlayerY /= length;
+        enemyXPosition[i] = enemyToPlayerX;
+        enemyYPosition[i] = enemyToPlayerY;
+ 
     }
 }
 
@@ -97,6 +105,7 @@ int main()
                 window.close();
         }
         UpdatePlayerPosition(playerXPosition, playerYPosition);
+        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, playerXPosition, playerYPosition);
 
         player.setPosition(sf::Vector2f(playerXPosition, playerYPosition));
 
