@@ -16,11 +16,6 @@ const int numberOfEnemy = 10;
 float gameSpeed = 0.005f;
 float gameFactor = 5.0f;
 
-void UpdatePlayerPosition(float &currentxPosition, float &currentyPosition)
-{
-    
-}
-
 void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float* enemyYPosition, sf::Vector2f pos)
 {
     for (int i = 0; i < numberOfEnemy; i++)
@@ -64,7 +59,6 @@ int main()
 
     Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 0.05f, screenWidth, screenHeight};
     
-    
     while (window.isOpen())
     {
         sf::Event event;
@@ -74,11 +68,12 @@ int main()
                 window.close();
         }
         player.Update();
-        player.Draw(window);
-        sf::Vector2f pos = player.GetPosition();
-        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, pos);
+        //sf::Vector2f pos = player.GetPosition();
+        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, player.GetPosition()); 
         
         window.clear();
+
+        player.Draw(window);
         
         for (int i = 0; i < numberOfEnemy; i++)
         {

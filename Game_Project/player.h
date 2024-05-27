@@ -16,14 +16,15 @@ public:
 private:
 	void ProcessInput();
 
-
 private:
-	int screenWidth, screenHeight;
-	sf::Vector2f position;
-	float speed;
-	float gameFactor = 10.0f;
-
 	sf::RectangleShape shape;
+
 	float size;
 	sf::Color color;
+	sf::Vector2f position;
+	float speed;
+	float gameFactor = 3.0f;
+
+	int screenWidth, screenHeight;
+
 };

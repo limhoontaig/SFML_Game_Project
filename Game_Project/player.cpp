@@ -4,7 +4,7 @@ Player::Player(sf::Vector2f pos, float size, sf::Color color, float speed, int s
     : position(pos), size(size), color(color), speed(speed), screenWidth(screenWidth), screenHeight(screenHeight)
 {
     shape.setSize(sf::Vector2f{ size, size });
-    shape.setPosition(sf::Vector2f{ position.x, position.y });
+    //shape.setPosition( position );
     shape.setFillColor(color);
 }
 void Player::Update()
