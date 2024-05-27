@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "player.h"
+
 #ifdef _DEBUG
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #else
@@ -12,39 +14,11 @@ int screenWidth = 800;
 int screenHeight = 450;
 const int numberOfEnemy = 10;
 float gameSpeed = 0.005f;
-float rectWidth = 20.0f;
-float rectHeight = 20.0f;
+float gameFactor = 5.0f;
 
 void UpdatePlayerPosition(float &currentxPosition, float &currentyPosition)
 {
-    bool pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-    bool pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-    bool pressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-    bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
-    if (pressedLeft)
-    {
-        currentxPosition -= gameSpeed;
-        if (currentxPosition <= 0)
-            currentxPosition = 0.0;
-    }
-    if (pressedRight)
-    {
-        currentxPosition += gameSpeed;
-        if (currentxPosition >= screenWidth - rectWidth)
-            currentxPosition = screenWidth - rectWidth;
-    }
-    if (pressedUp)
-    {
-        currentyPosition -= gameSpeed;
-        if (currentyPosition <= 0)
-            currentyPosition = 0.0;
-    }
-    if (pressedDown)
-    {
-        currentyPosition += gameSpeed;
-        if (currentyPosition >= screenHeight - rectHeight)
-            currentyPosition = screenHeight - rectHeight;
-    }
+    
 }
 
 void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float* enemyYPosition,float playerXPosition, float playerYPosition )
@@ -71,7 +45,6 @@ int main()
     
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Game");
     
-    sf::RectangleShape player;
     float* enemyXPosition = new float [numberOfEnemy];
     float* enemyYPosition = new float [numberOfEnemy];
     const float enemySize = 10.0f;
@@ -89,13 +62,8 @@ int main()
         enemies[i].setOutlineThickness(3.0f);
     }
 
-
-    float playerXPosition = 50.0f;
-    float playerYPosition = 50.0f;
-
-    player.setSize(sf::Vector2f(rectWidth, rectHeight));
-    player.setPosition(sf::Vector2f(playerXPosition, playerYPosition));
-    player.setFillColor(sf::Color::Red);
+    Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 0.05f};
+    
     
     while (window.isOpen())
     {
