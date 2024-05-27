@@ -33,15 +33,15 @@ void Player::ProcessInput()
     bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
     if (pressedLeft)
     {
-        position -= speed * gameFactor;
-        if (position <= 0)
-            currentxPosition = 0.0;
+        position.x -= speed * gameFactor;
+        if (position.x <= 0)
+            position.x = 0.0;
     }
     if (pressedRight)
     {
-        currentxPosition += gameSpeed * gameFactor;
-        if (currentxPosition >= screenWidth - rectWidth)
-            currentxPosition = screenWidth - rectWidth;
+        position.x += speed * gameFactor;
+        if (position.x >= screenWidth - size)
+            position.x = screenWidth - size;
     }
     if (pressedUp)
     {
