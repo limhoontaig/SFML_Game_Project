@@ -5,7 +5,7 @@
 class Player
 {
 public:
-	Player(sf::Vector2f pos, float size, sf::Color color, float speed);
+	Player(sf::Vector2f pos, float size, sf::Color color, float speed, int screenWidth, int screenHeight);
 
 	void Update();
 
@@ -18,6 +18,7 @@ private:
 
 
 private:
+	int screenWidth, screenHeight;
 	sf::Vector2f position;
 	float speed;
 	float gameFactor = 10.0f;

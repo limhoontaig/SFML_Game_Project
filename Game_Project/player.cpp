@@ -1,28 +1,26 @@
 #include "player.h"
 
-Player::Player(sf::Vector2f pos, float size, sf::Color color, float speed)
-    : position(pos), size(size), color(color), speed(speed)
+Player::Player(sf::Vector2f pos, float size, sf::Color color, float speed, int screenWidth, int screenHeight)
+    : position(pos), size(size), color(color), speed(speed), screenWidth(screenWidth), screenHeight(screenHeight)
 {
-    sf::RectangleShape player;
- 
-
-    player.setSize(sf::Vector2f(size, size));
-    player.setPosition(sf::Vector2f(pos.x, pos.y));
-    player.setFillColor(color);
+    shape.setSize(sf::Vector2f{ size, size });
+    shape.setPosition(sf::Vector2f{ position.x, position.y });
+    shape.setFillColor(color);
 }
 void Player::Update()
 {
-
+    ProcessInput();
+    shape.setPosition(position);
 }
 
 void Player::Draw(sf::RenderWindow& window)
 {
-
+    window.draw(shape);
 }
 
 sf::Vector2f Player::GetPosition()
 {
-
+    return position;
 }
 
 void Player::ProcessInput()
@@ -45,14 +43,14 @@ void Player::ProcessInput()
     }
     if (pressedUp)
     {
-        currentyPosition -= gameSpeed * gameFactor;
-        if (currentyPosition <= 0)
-            currentyPosition = 0.0;
+        position.y -= speed * gameFactor;
+        if (position.y <= 0)
+            position.y = 0.0;
     }
     if (pressedDown)
     {
-        currentyPosition += gameSpeed * gameFactor;
-        if (currentyPosition >= screenHeight - rectHeight)
-            currentyPosition = screenHeight - rectHeight;
+        position.y += speed * gameFactor;
+        if (position.y >= screenHeight - size)
+            position.y = screenHeight - size;
     }
 }

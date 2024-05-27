@@ -21,12 +21,12 @@ void UpdatePlayerPosition(float &currentxPosition, float &currentyPosition)
     
 }
 
-void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float* enemyYPosition,float playerXPosition, float playerYPosition )
+void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, float* enemyYPosition, sf::Vector2f pos)
 {
     for (int i = 0; i < numberOfEnemy; i++)
     {
-        float enemyToPlayerX = playerXPosition - enemyXPosition[i];
-        float enemyToPlayerY = playerYPosition - enemyYPosition[i];
+        float enemyToPlayerX = pos.x - enemyXPosition[i];
+        float enemyToPlayerY = pos.y - enemyYPosition[i];
 
         float length = sqrt(enemyToPlayerX * enemyToPlayerX + enemyToPlayerY * enemyToPlayerY);
         
@@ -62,7 +62,7 @@ int main()
         enemies[i].setOutlineThickness(3.0f);
     }
 
-    Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 0.05f};
+    Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 0.05f, screenWidth, screenHeight};
     
     
     while (window.isOpen())
@@ -73,13 +73,13 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        UpdatePlayerPosition(playerXPosition, playerYPosition);
-        player.setPosition(sf::Vector2f(playerXPosition, playerYPosition));
-        
-        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, playerXPosition, playerYPosition);
+        player.Update();
+        player.Draw(window);
+        sf::Vector2f pos = player.GetPosition();
+        UpdateEnemyPosition(numberOfEnemy, enemyXPosition, enemyYPosition, pos);
         
         window.clear();
-        window.draw(player);
+        
         for (int i = 0; i < numberOfEnemy; i++)
         {
             enemies[i].setPosition(sf::Vector2f(enemyXPosition[i], enemyYPosition[i]));
