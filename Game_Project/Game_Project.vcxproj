@@ -136,6 +136,7 @@
     <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\SFML\Graphics.hpp" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>

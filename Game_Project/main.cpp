@@ -14,27 +14,7 @@ int screenWidth = 800;
 int screenHeight = 450;
 float gameSpeed = 0.005f;
 float gameFactor = 5.0f;
-/*
-void UpdateEnemyPosition(int numberOfEnemy, float* enemyXPosition, 
-    float* enemyYPosition, sf::Vector2f pos)
-{
-    for (int i = 0; i < numberOfEnemy; i++)
-    {
-        float enemyToPlayerX = pos.x - enemyXPosition[i];
-        float enemyToPlayerY = pos.y - enemyYPosition[i];
 
-        float length = sqrt(enemyToPlayerX * enemyToPlayerX + 
-            enemyToPlayerY * enemyToPlayerY);
-        
-        enemyToPlayerX /= length;
-        enemyToPlayerY /= length;
-
-        enemyXPosition[i] += enemyToPlayerX * gameSpeed;
-        enemyYPosition[i] += enemyToPlayerY * gameSpeed;
- 
-    }
-}
-*/
 
 int main()
 {
@@ -49,13 +29,15 @@ int main()
     // enemies create
     const int enemyCount = 10;
     Enemy* enemies = new Enemy[enemyCount];
+    
     for (int i = 0; i < enemyCount; i++)
     {
         float enemyRandomX = screenWidth - 100;
         float enemyRandomY = rand() % screenHeight;
         sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
-        //enemies[i] = Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.05f };//, & player };
+        enemies[i] = Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.05f , &player };
     }
+    
 
 
     while (window.isOpen())
@@ -72,17 +54,19 @@ int main()
         
         for (int i = 0; i < enemyCount; i++)
         {
-            //enemies[i].Update();
+            enemies[i].Update();
         }
         
         window.clear();
 
         player.Draw(window);
         
+        
         for (int i = 0; i < enemyCount; i++)
         {
             enemies[i].Draw(window);
         }
+        
         window.display();
     }
     delete[] enemies;
