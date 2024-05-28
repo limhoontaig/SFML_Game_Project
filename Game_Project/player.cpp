@@ -1,12 +1,15 @@
 #include "player.h"
 
-Player::Player(sf::Vector2f pos, float size, sf::Color color, float speed, int screenWidth, int screenHeight)
-    : position(pos), size(size), color(color), speed(speed), screenWidth(screenWidth), screenHeight(screenHeight)
+Player::Player(sf::Vector2f pos, float size, sf::Color color, 
+    float speed, int screenWidth, int screenHeight)
+    : position(pos), size(size), color(color), speed(speed), 
+    screenWidth(screenWidth), screenHeight(screenHeight)
 {
     shape.setSize(sf::Vector2f{ size, size });
     //shape.setPosition( position );
     shape.setFillColor(color);
 }
+
 void Player::Update()
 {
     ProcessInput();

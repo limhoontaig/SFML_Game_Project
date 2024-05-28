@@ -5,7 +5,8 @@
 class Player
 {
 public:
-	Player(sf::Vector2f pos, float size, sf::Color color, float speed, int screenWidth, int screenHeight);
+	Player(sf::Vector2f pos, float size, sf::Color color, 
+		float speed, int screenWidth, int screenHeight);
 
 	void Update();
 
