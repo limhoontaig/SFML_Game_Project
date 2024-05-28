@@ -27,15 +27,16 @@ int main()
         0.05f, screenWidth, screenHeight};
 
     // enemies create
-    const int enemyCount = 10;
-    Enemy* enemies = new Enemy[enemyCount];
+
+    std::vector<Enemy*> enemies;
     
-    for (int i = 0; i < enemyCount; i++)
+    for (int i = 0; i < 10; i++)
     {
         float enemyRandomX = screenWidth - 100;
         float enemyRandomY = rand() % screenHeight;
         sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
-        enemies[i] = Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.05f , &player };
+        Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.05f , &player };
+        enemies.push_back(e);
     }
     
 
@@ -52,9 +53,9 @@ int main()
         player.Update();
         //sf::Vector2f pos = player.GetPosition();
         
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < enemies.size(); i++)
         {
-            enemies[i].Update();
+            (*enemies[i]).Update();
         }
         
         window.clear();
@@ -62,9 +63,9 @@ int main()
         player.Draw(window);
         
         
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < enemies.size(); i++)
         {
-            enemies[i].Draw(window);
+            (*enemies[i]).Draw(window);
         }
         
         window.display();
