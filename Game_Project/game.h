@@ -1,5 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
+
+class Player;
+class Enemy;
+class Bullet;
+
 class Game
 {
 public:
@@ -16,5 +22,18 @@ private:
 	int screenWidth = 800;
 	int screenHeight = 450;
 	sf::RenderWindow window{ sf::VideoMode(screenWidth, screenHeight) , "Game"};
+
+	float bulletFirePeriod;
+	float bulletFireTimer;
+	sf::Color enemyColor;
+	sf::Color bulletColor;
+
+	sf::Clock deltaTimeClock;
+
+	// Game Data
+	Player* player;
+	std::vector <Enemy*> enemies;
+	std::vector <Bullet*> bullets;
+
 
 };
