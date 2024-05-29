@@ -21,7 +21,7 @@ void Player::Draw(sf::RenderWindow& window)
     window.draw(shape);
 }
 
-sf::Vector2f Player::GetPosition()
+sf::Vector2f Player::GetPosition() const
 {
     return position;
 }

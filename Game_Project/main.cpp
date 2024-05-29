@@ -70,7 +70,7 @@ int main()
         
         window.display();
     }
-    delete[] enemies;
+    //delete[] enemies;
 
     return 0;
 }

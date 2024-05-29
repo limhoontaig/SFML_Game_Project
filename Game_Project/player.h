@@ -12,7 +12,7 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 
-	sf::Vector2f GetPosition();
+	sf::Vector2f GetPosition() const;
 
 private:
 	void ProcessInput();
