@@ -42,9 +42,14 @@ int main()
     }
     
     // Bullet create
-    Bullet b{ sf::Vector2f{0,0}, sf::Vector2f{1,0}, 3.0f, sf::Color::Magenta, 0.05f};
-    /*
+
     std::vector<Bullet*> bullets;
+    //Bullet b{ sf::Vector2f{0,0}, sf::Vector2f{1,0}, 3.0f, sf::Color::Magenta, 0.05f};
+    float bulletFirePeriod = 1.0f;
+    float bulletFireTimer = bulletFirePeriod;
+
+
+    /*
     while (1)
     {
         sf::Vector2f position = player.GetPosition();
@@ -53,6 +58,7 @@ int main()
         //sleep(1000);
     }
     */
+    sf::Clock deltaTimeClock;
 
     while (window.isOpen())
     {
@@ -62,7 +68,18 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        
+        // Timer 생성
+        float dt = deltaTimeClock.restart().asSeconds();
+        bulletFireTimer -= dt;
+        if (bulletFireTimer < 0)
+        {
+            // 신규 Bullet 생성
+            Bullet* b = new Bullet{ player.GetPosition(), sf::Vector2f(0,-1),
+                                    3.0f, sf::Color::Green, 0.1f };
+            bullets.push_back(b);
+            bulletFireTimer = bulletFirePeriod;
+        }
+
         // Player Update
         player.Update();
         //sf::Vector2f pos = player.GetPosition();
@@ -75,7 +92,11 @@ int main()
         }
 
         // Bullet Update
-        b.Update();
+        //b.Update();
+        for (int i = 0; i < bullets.size(); i++)
+        {
+            bullets[i]->Update();
+        }
         
         window.clear();
 
@@ -89,7 +110,11 @@ int main()
         }
         
         //Bullet Draw
-        b.Draw(window);
+        //b.Draw(window);
+        for (int i = 0; i < bullets.size(); i++)
+        {
+            (*bullets[i]).Draw(window);
+        }
 
         window.display();
     }
@@ -98,6 +123,9 @@ int main()
     {
         delete enemies[i];
     }
-
+    for (int i = 0; i < bullets.size(); i++)
+    {
+        delete bullets[i];
+    }
     return 0;
 }
