@@ -14,7 +14,7 @@
 
 int screenWidth = 800;
 int screenHeight = 450;
-float gameFactor = 5.0f;
+float gameFactor = 50.0f;
 
 
 int main()
@@ -22,7 +22,7 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Game");
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(60);
     // player create object
     Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 
         100.0f, screenWidth, screenHeight};
@@ -30,15 +30,9 @@ int main()
     // enemies create
 
     std::vector<Enemy*> enemies;
+    float enemyFirePeriod = 10.0f;
+    float enemyFireTimer = enemyFirePeriod;
     
-    for (int i = 0; i < 10; i++)
-    {
-        float enemyRandomX = screenWidth - 100;
-        float enemyRandomY = rand() % screenHeight;
-        sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
-        Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.2f , &player };
-        enemies.push_back(e);
-    }
     
     // Bullet create
     std::vector<Bullet*> bullets;
@@ -57,10 +51,26 @@ int main()
         }
         // Timer 생성
         float dt = deltaTimeClock.restart().asSeconds();
+
+        // 신규 enemy 생성
+        enemyFireTimer -= dt;
+
+        if (enemyFireTimer< 0)
+        {
+            float enemyRandomX = rand() % (screenWidth - 100);
+            float enemyRandomY = rand() % screenHeight;
+            sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
+            Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.2f , &player };
+            enemies.push_back(e);
+            enemyFireTimer = enemyFirePeriod;
+        }
+
+
+
+        // 신규 Bullet 생성
         bulletFireTimer -= dt;
         if (bulletFireTimer < 0)
         {
-            // 신규 Bullet 생성
             Bullet* b = new Bullet{ player.GetPosition(), sf::Vector2f(0,-1),
                                     3.0f, sf::Color::Green, 500.0f };
             bullets.push_back(b);
@@ -100,6 +110,7 @@ int main()
         }
 
         window.display();
+        //sf::sleep(sf::seconds(0.1f));
     }
     // enenies memory 해제
     for (int i = 0; i < enemies.size(); i++)
