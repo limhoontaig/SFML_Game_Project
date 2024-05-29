@@ -9,14 +9,14 @@ public:
 	
 	Bullet() {};
 
-	void Update();
+	void Update(float dt);
 
 	void Draw(sf::RenderWindow& window);
 
 	sf::Vector2f GetPosition() const { return position; }
 
 private:
-	void UpdatePosition();
+	void UpdatePosition(float dt);
 
 private:
 	sf::Vector2f position;

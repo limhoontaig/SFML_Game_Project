@@ -17,10 +17,10 @@ Enemy::Enemy()
 }
 
 
-void Enemy::Update()
+void Enemy::Update(float dt)
 {
+	UpdatePosition(dt);
 	shape.setPosition(position);
-	UpdatePosition();
 }
 
 void Enemy::Draw(sf::RenderWindow& window)
@@ -33,7 +33,7 @@ sf::Vector2f Enemy::GetPosition() const
 	return sf::Vector2f();
 }
 
-void Enemy::UpdatePosition()
+void Enemy::UpdatePosition(float dt)
 {	
 	float enemyToPlayerX = playerRef->GetPosition().x - position.x;
 	float enemyToPlayerY = playerRef->GetPosition().y - position.y;

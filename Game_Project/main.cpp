@@ -14,7 +14,6 @@
 
 int screenWidth = 800;
 int screenHeight = 450;
-float gameSpeed = 0.005f;
 float gameFactor = 5.0f;
 
 
@@ -23,10 +22,10 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Game");
-
+    window.setFramerateLimit(120);
     // player create object
     Player player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red , 
-        0.05f, screenWidth, screenHeight};
+        100.0f, screenWidth, screenHeight};
 
     // enemies create
 
@@ -37,27 +36,15 @@ int main()
         float enemyRandomX = screenWidth - 100;
         float enemyRandomY = rand() % screenHeight;
         sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
-        Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.05f , &player };
+        Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.2f , &player };
         enemies.push_back(e);
     }
     
     // Bullet create
-
     std::vector<Bullet*> bullets;
-    //Bullet b{ sf::Vector2f{0,0}, sf::Vector2f{1,0}, 3.0f, sf::Color::Magenta, 0.05f};
     float bulletFirePeriod = 1.0f;
     float bulletFireTimer = bulletFirePeriod;
-
-
-    /*
-    while (1)
-    {
-        sf::Vector2f position = player.GetPosition();
-        sf::Vector2f direction = { screenWidth, position.y };
-        Bullet* b = new Bullet{ position, direction, 3.0f, sf::Color::Magenta, 0.05f };
-        //sleep(1000);
-    }
-    */
+   
     sf::Clock deltaTimeClock;
 
     while (window.isOpen())
@@ -75,27 +62,24 @@ int main()
         {
             // 신규 Bullet 생성
             Bullet* b = new Bullet{ player.GetPosition(), sf::Vector2f(0,-1),
-                                    3.0f, sf::Color::Green, 0.1f };
+                                    3.0f, sf::Color::Green, 500.0f };
             bullets.push_back(b);
             bulletFireTimer = bulletFirePeriod;
         }
 
         // Player Update
-        player.Update();
-        //sf::Vector2f pos = player.GetPosition();
+        player.Update(dt);
         
         // Enemy Update
         for (int i = 0; i < enemies.size(); i++)
         {
-            // (*enemies[i]).Update();
-            enemies[i]->Update();
+            enemies[i]->Update(dt);
         }
 
         // Bullet Update
-        //b.Update();
         for (int i = 0; i < bullets.size(); i++)
         {
-            bullets[i]->Update();
+            bullets[i]->Update(dt);
         }
         
         window.clear();
@@ -110,7 +94,6 @@ int main()
         }
         
         //Bullet Draw
-        //b.Draw(window);
         for (int i = 0; i < bullets.size(); i++)
         {
             (*bullets[i]).Draw(window);
@@ -118,11 +101,13 @@ int main()
 
         window.display();
     }
-    
+    // enenies memory 해제
     for (int i = 0; i < enemies.size(); i++)
     {
         delete enemies[i];
     }
+
+    // Bullets 메모리해제
     for (int i = 0; i < bullets.size(); i++)
     {
         delete bullets[i];

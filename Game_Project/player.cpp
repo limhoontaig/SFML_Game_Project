@@ -6,14 +6,13 @@ Player::Player(sf::Vector2f pos, float size, sf::Color color,
     screenWidth(screenWidth), screenHeight(screenHeight)
 {
     shape.setSize(sf::Vector2f{ size, size });
-    //shape.setPosition( position );
     shape.setFillColor(color);
 }
 
-void Player::Update()
+void Player::Update(float dt)
 {
-    ProcessInput();
     shape.setPosition(position);
+    ProcessInput(dt);
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -26,7 +25,7 @@ sf::Vector2f Player::GetPosition() const
     return position;
 }
 
-void Player::ProcessInput()
+void Player::ProcessInput(float dt)
 {
     bool pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
     bool pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
@@ -34,25 +33,25 @@ void Player::ProcessInput()
     bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
     if (pressedLeft)
     {
-        position.x -= speed * gameFactor;
+        position.x -= speed * dt;// *gameFactor;
         if (position.x <= 0)
             position.x = 0.0;
     }
     if (pressedRight)
     {
-        position.x += speed * gameFactor;
+        position.x += speed * dt;// * gameFactor;
         if (position.x >= screenWidth - size)
             position.x = screenWidth - size;
     }
     if (pressedUp)
     {
-        position.y -= speed * gameFactor;
+        position.y -= speed * dt;// * gameFactor;
         if (position.y <= 0)
             position.y = 0.0;
     }
     if (pressedDown)
     {
-        position.y += speed * gameFactor;
+        position.y += speed * dt;// * gameFactor;
         if (position.y >= screenHeight - size)
             position.y = screenHeight - size;
     }

@@ -8,9 +8,9 @@ Bullet::Bullet(const sf::Vector2f& position, const sf::Vector2f& direction,
 	shape.setFillColor(color);	
 }
 
-void Bullet::Update()
+void Bullet::Update(float dt)
 {
-	UpdatePosition();
+	UpdatePosition(dt);
 	shape.setPosition(position);
 }
 
@@ -19,8 +19,8 @@ void Bullet::Draw(sf::RenderWindow& window)
 	window.draw(shape);
 }
 
-void Bullet::UpdatePosition()
+void Bullet::UpdatePosition(float dt)
 {
-	position += direction * speed;
+	position += direction * speed * dt;
 }
 
