@@ -1,11 +1,13 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
+
+class Game;
 
 class Bullet
 {
 public:
-	Bullet(const sf::Vector2f& position, const sf::Vector2f& direction,
-		float size, const sf::Color& color, float speed);
+	Bullet(Game* game, float size, const sf::Color& color, float speed);
 	
 	Bullet() {};
 
@@ -19,6 +21,7 @@ private:
 	void UpdatePosition(float dt);
 
 private:
+	Game* game;
 	sf::Vector2f position;
 	sf::Vector2f direction;
 	float speed;

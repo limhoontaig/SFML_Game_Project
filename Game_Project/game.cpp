@@ -85,8 +85,7 @@ void Game::UpdateGame()
 	bulletFireTimer -= dt;
 	if (bulletFireTimer < 0)
 	{
-		Bullet* b = new Bullet{ player->GetPosition(), sf::Vector2f(0,1),
-								3.0f, sf::Color::Green, 100.0f };
+		Bullet* b = new Bullet{ this, 3.0f, sf::Color::Green, 100.0f };
 		bullets.push_back(b);
 		bulletFireTimer = bulletFirePeriod;	
 
