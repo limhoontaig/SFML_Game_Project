@@ -21,6 +21,6 @@ void Bullet::Draw(sf::RenderWindow& window)
 
 void Bullet::UpdatePosition(float dt)
 {
-	position += direction * speed * dt;
+	position += direction * speed *dt;
 }
 

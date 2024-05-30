@@ -25,9 +25,7 @@ private:
 
 	float bulletFirePeriod;
 	float bulletFireTimer;
-	sf::Color enemyColor;
-	sf::Color bulletColor;
-
+	
 	sf::Clock deltaTimeClock;
 
 	// Game Data

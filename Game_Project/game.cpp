@@ -5,6 +5,8 @@
 #include "enemy.h"
 #include "bullet.h"
 
+//class Player;
+
 Game::Game()
 	:player{ nullptr }
 {
@@ -31,6 +33,9 @@ void Game::RunLoop()
 
 void Game::Shutdown()
 {
+	// Player memort delete
+	delete player;
+
 	// enenies memory 해제
 	for (int i = 0; i < enemies.size(); i++)
 	{
@@ -52,22 +57,16 @@ void Game::InitializeGame()
 	// enemies
 	for (int i = 0; i < 10; i++)
 	{
-		float enemyRandomX = rand() % (screenWidth - 100);
+		float enemyRandomX = (screenWidth - 100); // rand() %
 		float enemyRandomY = rand() % screenHeight;
 		sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
 
-		Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.2f , player };
+		Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.02f , player };
 		enemies.push_back(e);
 	}
 
 	// 신규 Bullet 생성
 	bulletFirePeriod = 1.0f;
-	bulletFireTimer = bulletFirePeriod;
-
-
-	/*
-	
-	*/
 }
 
 void Game::ProcessInput()
@@ -83,17 +82,18 @@ void Game::ProcessInput()
 void Game::UpdateGame()
 {
 	float dt = deltaTimeClock.restart().asSeconds();
-	std::cout << dt << std::endl;
 	bulletFireTimer -= dt;
 	if (bulletFireTimer < 0)
 	{
-		Bullet* b = new Bullet{ player.GetPosition(), sf::Vector2f(0,-1),
-								3.0f, sf::Color::Green, 500.0f };
+		Bullet* b = new Bullet{ player->GetPosition(), sf::Vector2f(0,1),
+								3.0f, sf::Color::Green, 100.0f };
 		bullets.push_back(b);
+		bulletFireTimer = bulletFirePeriod;	
+
 	}
 
 	// Player Update
-	player.Update(dt);
+	player->Update(dt);
 
 	// Enemy Update
 	for (int i = 0; i < enemies.size(); i++)
@@ -113,7 +113,7 @@ void Game::DrawGame()
 	window.clear();
 
 	// Player Draw
-	player.Draw(window);
+	player->Draw(window);
 
 	// Enemy Draw
 	for (int i = 0; i < enemies.size(); i++)
