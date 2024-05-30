@@ -14,6 +14,7 @@ public:
 	void RunLoop(); // 게임 루프
 	void Shutdown(); // 종료 로직
 	Player* GetPlayer() { return player; }
+	std::vector <Enemy*> GetEnemies() { return enemies; }
 private:
 	void InitializeGame(); // 게임 내부 객체 생성
 	void ProcessInput();  // 게임 종료 탐지

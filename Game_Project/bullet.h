@@ -19,6 +19,7 @@ public:
 
 private:
 	void UpdatePosition(float dt);
+	sf::Vector2f GetClosestEnemyDirection();
 
 private:
 	Game* game;
