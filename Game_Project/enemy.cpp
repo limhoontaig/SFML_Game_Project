@@ -28,10 +28,6 @@ void Enemy::Draw(sf::RenderWindow& window)
 	window.draw(shape);
 }
 
-sf::Vector2f Enemy::GetPosition() const
-{
-	return sf::Vector2f();
-}
 
 void Enemy::UpdatePosition(float dt)
 {	

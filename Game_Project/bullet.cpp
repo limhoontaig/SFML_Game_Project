@@ -38,7 +38,6 @@ sf::Vector2f Bullet::GetClosestEnemyDirection()
 	float minDist = 10000.0f;
 	sf::Vector2f minDistVec;
 
-	sf::Vector2f bulletToEnemyVec;
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		sf::Vector2f enemyPos = enemies[i]->GetPosition();
@@ -48,10 +47,9 @@ sf::Vector2f Bullet::GetClosestEnemyDirection()
 		if (dist < minDist)
 		{
 			minDist = dist;
-			bulletToEnemyVec = bulletToEnemyVec / dist;
+			minDistVec = bulletToEnemyVec / dist;
 		}
-
 	}
-	return bulletToEnemyVec;
+	return minDistVec;
 }
 

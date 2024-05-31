@@ -49,11 +49,17 @@ void Game::Shutdown()
 	}
 }
 
+std::vector<Enemy*> Game::GetEnemies()
+{
+	return std::vector<Enemy*>(enemies);
+}
+
 void Game::InitializeGame()
 {
 	// player create object
 	player = new Player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red ,
-		100.0f, screenWidth, screenHeight };
+		300.0f, screenWidth, screenHeight };
+
 	// enemies
 	for (int i = 0; i < 10; i++)
 	{
@@ -82,11 +88,14 @@ void Game::ProcessInput()
 void Game::UpdateGame()
 {
 	float dt = deltaTimeClock.restart().asSeconds();
+
 	bulletFireTimer -= dt;
 	if (bulletFireTimer < 0)
 	{
-		Bullet* b = new Bullet{ this, 3.0f, sf::Color::Green, 100.0f };
+		Bullet* b = new Bullet{ this, 3.0f, sf::Color::Green, 500.0f };
+
 		bullets.push_back(b);
+
 		bulletFireTimer = bulletFirePeriod;	
 
 	}

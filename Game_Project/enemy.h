@@ -19,7 +19,7 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 
-	sf::Vector2f GetPosition() const;// const { return position };
+	sf::Vector2f GetPosition() const const { return position; }
 
 private:
 	void UpdatePosition(float dt);
