@@ -14,7 +14,12 @@ public:
 	void RunLoop(); // 게임 루프
 	void Shutdown(); // 종료 로직
 	Player* GetPlayer() { return player; }
-	std::vector <Enemy*> GetEnemies();// { return enemies; }
+	std::vector <Enemy*> GetEnemies() { return enemies; }
+	std::vector <Bullet*> GetBullets() { return bullets; }
+
+	sf::Texture& GetShipTexture() { return shipTexture; }
+	sf::Texture& GetProjectileTexture() { return projettileTexture; }
+
 private:
 	void InitializeGame(); // 게임 내부 객체 생성
 	void ProcessInput();  // 게임 종료 탐지
@@ -29,6 +34,9 @@ private:
 	float bulletFireTimer;
 	
 	sf::Clock deltaTimeClock;
+
+	sf::Texture shipTexture;
+	sf::Texture projettileTexture;
 
 	// Game Data
 	Player* player;

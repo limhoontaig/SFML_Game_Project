@@ -1,15 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-//#include "player.h"
 
 class Player;
-
+class Game;
 class Enemy
 {
 public:
 	
-	Enemy(const sf::Vector2f pos, float size, sf::Color color, 
-		float speed, const Player* player);
+	Enemy(Game* game, const sf::Vector2f pos, float size, float speed);
 	
 	Enemy(); // 기본 생성자
 	//~Enemy();
@@ -19,17 +17,19 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 
-	sf::Vector2f GetPosition() const const { return position; }
+	sf::Vector2f GetPosition() const { return position; }
 
 private:
 	void UpdatePosition(float dt);
 
 private:
+	Game* game;
+
 	sf::Vector2f position;
 	float speed;
 	const Player* playerRef;
 
-	sf::CircleShape shape;
+	sf::Sprite shape;
 	float size;
 	sf::Color color;
 };

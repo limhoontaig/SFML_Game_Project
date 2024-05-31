@@ -1,12 +1,17 @@
 #include "player.h"
+#include "game.h"
 
-Player::Player(sf::Vector2f pos, float size, sf::Color color, 
+Player::Player(Game* game, sf::Vector2f pos, float size,  
     float speed, int screenWidth, int screenHeight)
-    : position(pos), size(size), color(color), speed(speed), 
+    : game{ game }, position(pos), size(size), speed(speed),
     screenWidth(screenWidth), screenHeight(screenHeight)
 {
-    shape.setSize(sf::Vector2f{ size, size });
-    shape.setFillColor(color);
+    
+    shape.setTexture(game->GetShipTexture());
+    shape.setTextureRect(sf::IntRect{ 8,0,8,8 }); // x, y, width, height
+
+    shape.setScale(sf::Vector2f{ size, size });
+
 }
 
 void Player::Update(float dt)

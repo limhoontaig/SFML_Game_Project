@@ -3,16 +3,18 @@
 #include "enemy.h"
 #include "player.h"
 
-Bullet::Bullet(Game* game, float size, const sf::Color& color, float speed)
-	: game(game), size{size}, color{color}, speed{speed}
+Bullet::Bullet(Game* game, float size, float speed)
+	: game(game), size{size}, speed{speed}
 {
 	Player* player = game->GetPlayer();
 	position = player->GetPosition();
 
 	direction = GetClosestEnemyDirection();
 
-	shape = sf::CircleShape{ size };
-	shape.setFillColor(color);	
+	shape.setTexture(game->GetProjectileTexture());
+	shape.setTextureRect(sf::IntRect{ 0,0,8,8 });
+
+	shape.setScale(sf::Vector2f{ size, size });
 }
 
 void Bullet::Update(float dt)

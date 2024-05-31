@@ -2,10 +2,12 @@
 
 #include <SFML/Graphics.hpp>
 
+class Game;
+
 class Player
 {
 public:
-	Player(sf::Vector2f pos, float size, sf::Color color, 
+	Player(Game* game, sf::Vector2f pos, float size,  
 		float speed, int screenWidth, int screenHeight);
 
 	void Update(float dt);
@@ -18,14 +20,17 @@ private:
 	void ProcessInput(float dt);
 
 private:
-	sf::RectangleShape shape;
+	Game* game;
 
-	float size;
-	sf::Color color;
 	sf::Vector2f position;
 	float speed;
-	float gameFactor = 3.0f;
+	float size;
+	sf::Sprite shape;
 
+	//sf::RectangleShape shape;
+	//sf::Color color;
+	
+	float gameFactor = 3.0f;
 	int screenWidth, screenHeight;
 
 };

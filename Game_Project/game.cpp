@@ -16,6 +16,18 @@ Game::Game()
 
 bool Game::Initialize()
 {
+	// INITTIALIZE RESOURCES
+	if (!shipTexture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png"))
+	{
+		return false;
+	}
+	if (!projettileTexture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png"))
+	{
+		return false;
+	}
+
+
+
 	InitializeGame();
 	return true;
 }
@@ -49,15 +61,11 @@ void Game::Shutdown()
 	}
 }
 
-std::vector<Enemy*> Game::GetEnemies()
-{
-	return std::vector<Enemy*>(enemies);
-}
 
 void Game::InitializeGame()
 {
 	// player create object
-	player = new Player{ sf::Vector2f{50.0f, 50.0f}, 20.0f ,sf::Color::Red ,
+	player = new Player{ this, sf::Vector2f{50.0f, 50.0f}, 3.0f ,
 		300.0f, screenWidth, screenHeight };
 
 	// enemies
@@ -67,7 +75,7 @@ void Game::InitializeGame()
 		float enemyRandomY = rand() % screenHeight;
 		sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
 
-		Enemy* e = new Enemy{ enemyPos, 10.0f, sf::Color::Cyan, 0.02f , player };
+		Enemy* e = new Enemy{ this, enemyPos, 10.0f, 0.02f };
 		enemies.push_back(e);
 	}
 
@@ -92,7 +100,7 @@ void Game::UpdateGame()
 	bulletFireTimer -= dt;
 	if (bulletFireTimer < 0)
 	{
-		Bullet* b = new Bullet{ this, 3.0f, sf::Color::Green, 500.0f };
+		Bullet* b = new Bullet{ this, 3.0f, 500.0f };
 
 		bullets.push_back(b);
 

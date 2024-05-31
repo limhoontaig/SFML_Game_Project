@@ -1,15 +1,15 @@
 #include "enemy.h"
 #include "player.h"
+#include "game.h"
 
-Enemy::Enemy(const sf::Vector2f pos, float size, sf::Color color, 
-	float speed, const Player* player)
-	: position {pos}, size{size}, color{color}, 
-	speed{speed}, playerRef{player}
+Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, 
+	float speed)
+	: position {pos}, size{size}, color{color}, speed{speed}
 {
-	shape = sf::CircleShape{ size };
-	shape.setFillColor(color);
-	shape.setOutlineColor(sf::Color::Red);
-	shape.setOutlineThickness(3.0f);
+	shape.setTexture(game->GetShipTexture());
+	shape.setTextureRect(sf::IntRect{ 40,0,8,8 });
+	
+	shape.setScale(sf::Vector2f{ size, size });
 }
 
 Enemy::Enemy()
