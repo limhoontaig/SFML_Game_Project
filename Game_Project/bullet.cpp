@@ -9,7 +9,7 @@ Bullet::Bullet(Game* game, float size, const sf::Color& color, float speed)
 	Player* player = game->GetPlayer();
 	position = player->GetPosition();
 
-	direction = 
+	direction = GetClosestEnemyDirection();
 
 	shape = sf::CircleShape{ size };
 	shape.setFillColor(color);	
@@ -34,13 +34,15 @@ void Bullet::UpdatePosition(float dt)
 sf::Vector2f Bullet::GetClosestEnemyDirection()
 {
 	std::vector<Enemy*> enemies = game->GetEnemies();
+
 	float minDist = 10000.0f;
 	sf::Vector2f minDistVec;
+
+	sf::Vector2f bulletToEnemyVec;
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		sf::Vector2f enemyPos = enemies[i]->GetPosition();
 		sf::Vector2f bulletToEnemyVec = enemyPos - position;
-
 		float dist = sqrt(bulletToEnemyVec.x * bulletToEnemyVec.x +
 			bulletToEnemyVec.y * bulletToEnemyVec.y);
 		if (dist < minDist)
@@ -50,6 +52,6 @@ sf::Vector2f Bullet::GetClosestEnemyDirection()
 		}
 
 	}
-
+	return bulletToEnemyVec;
 }
 
