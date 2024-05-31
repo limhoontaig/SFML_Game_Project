@@ -3,7 +3,7 @@
 
 Player::Player(Game* game, sf::Vector2f pos, float size,  
     float speed, int screenWidth, int screenHeight)
-    : game{ game }, position(pos), size(size), speed(speed),
+    : Actor {game, pos, speed, size},
     screenWidth(screenWidth), screenHeight(screenHeight)
 {
     
@@ -20,15 +20,6 @@ void Player::Update(float dt)
     ProcessInput(dt);
 }
 
-void Player::Draw(sf::RenderWindow& window)
-{
-    window.draw(shape);
-}
-
-sf::Vector2f Player::GetPosition() const
-{
-    return position;
-}
 
 void Player::ProcessInput(float dt)
 {

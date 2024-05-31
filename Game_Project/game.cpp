@@ -75,7 +75,7 @@ void Game::InitializeGame()
 		float enemyRandomY = rand() % screenHeight;
 		sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
 
-		Enemy* e = new Enemy{ this, enemyPos, 10.0f, 0.02f };
+		Enemy* e = new Enemy{ this, enemyPos, 3.0f, 0.02f };
 		enemies.push_back(e);
 	}
 
@@ -100,12 +100,10 @@ void Game::UpdateGame()
 	bulletFireTimer -= dt;
 	if (bulletFireTimer < 0)
 	{
-		Bullet* b = new Bullet{ this, 3.0f, 500.0f };
-
+		Bullet* b = new Bullet{ this, 5.0f, 500.0f };
 		bullets.push_back(b);
 
 		bulletFireTimer = bulletFirePeriod;	
-
 	}
 
 	// Player Update

@@ -2,8 +2,7 @@
 #include "player.h"
 #include "game.h"
 
-Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, 
-	float speed)
+Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, float speed)
 	:game{ game }, position { pos }, size{ size }, speed{ speed }
 {
 	shape.setTexture(game->GetShipTexture());

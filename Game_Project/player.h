@@ -1,10 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-
+#include "actor.h"
 class Game;
 
-class Player
+class Player : public Actor
 {
 public:
 	Player(Game* game, sf::Vector2f pos, float size,  
@@ -12,25 +12,11 @@ public:
 
 	void Update(float dt);
 
-	void Draw(sf::RenderWindow& window);
-
-	sf::Vector2f GetPosition() const;
-
 private:
 	void ProcessInput(float dt);
 
 private:
-	Game* game;
 
-	sf::Vector2f position;
-	float speed;
-	float size;
-	sf::Sprite shape;
-
-	//sf::RectangleShape shape;
-	//sf::Color color;
-	
 	float gameFactor = 3.0f;
 	int screenWidth, screenHeight;
-
 };

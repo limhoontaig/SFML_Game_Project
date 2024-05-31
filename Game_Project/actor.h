@@ -4,30 +4,18 @@
 
 class Game;
 
-class Bullet
+class Actor
 {
 public:
-	Bullet(Game* game, float size, float speed);
-	
+	Actor(Game* game, sf::Vector2f pos, float speed, float size);
 	void Update(float dt);
-
 	void Draw(sf::RenderWindow& window);
-
 	sf::Vector2f GetPosition() const { return position; }
-
-private:
-	void UpdatePosition(float dt);
-	sf::Vector2f GetClosestEnemyDirection();
-
-private:
+protected:
 	Game* game;
-
 	sf::Vector2f position;
-	sf::Vector2f direction;
 	float speed;
-
 	sf::Sprite shape;
 	float size;
 
-}; 
-
+};

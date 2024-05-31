@@ -27,6 +27,6 @@ private:
 	sf::Vector2f position;
 	float speed;
 
-	sf::Sprite shape;
 	float size;
+	sf::Sprite shape;
 };
