@@ -4,7 +4,7 @@
 
 Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, 
 	float speed)
-	: position {pos}, size{size}, color{color}, speed{speed}
+	:game{ game }, position { pos }, size{ size }, speed{ speed }
 {
 	shape.setTexture(game->GetShipTexture());
 	shape.setTextureRect(sf::IntRect{ 40,0,8,8 });
@@ -28,11 +28,16 @@ void Enemy::Draw(sf::RenderWindow& window)
 	window.draw(shape);
 }
 
+sf::Vector2f Enemy::GetPosition() const
+{
+	return sf::Vector2f(position);
+}
+
 
 void Enemy::UpdatePosition(float dt)
 {	
-	float enemyToPlayerX = playerRef->GetPosition().x - position.x;
-	float enemyToPlayerY = playerRef->GetPosition().y - position.y;
+	float enemyToPlayerX = game->GetPlayer()->GetPosition().x - position.x;
+	float enemyToPlayerY = game->GetPlayer()->GetPosition().y - position.y;
 
 	float length = sqrt(enemyToPlayerX * enemyToPlayerX +
 		enemyToPlayerY * enemyToPlayerY);

@@ -17,19 +17,16 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 
-	sf::Vector2f GetPosition() const { return position; }
+	sf::Vector2f GetPosition() const;
 
 private:
 	void UpdatePosition(float dt);
 
 private:
 	Game* game;
-
 	sf::Vector2f position;
 	float speed;
-	const Player* playerRef;
 
 	sf::Sprite shape;
 	float size;
-	sf::Color color;
 };
