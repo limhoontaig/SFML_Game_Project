@@ -2,8 +2,8 @@
 #include "enemy.h"
 #include "player.h"
 
-Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, float speed)
-	: Actor{ game, pos , speed, size }
+Enemy::Enemy(Game* game, ActorType type, const sf::Vector2f pos, float size, float speed)
+	: Actor{ game, type, pos , speed, size }
 {
 	shape.setTexture(game->GetShipTexture());
 	shape.setTextureRect(sf::IntRect{ 40,0,8,8 });
@@ -19,7 +19,7 @@ Enemy::~Enemy()
 }
 
 Enemy::Enemy()
-	: Enemy{nullptr, sf::Vector2f{0,0}, 1.0f, 1.0f}
+	: Enemy{nullptr, type, sf::Vector2f{0,0}, 1.0f, 1.0f}
 {
 }
 
@@ -31,8 +31,8 @@ void Enemy::Update(float dt)
 
 void Enemy::UpdatePosition(float dt)
 {	
-	sf::Vector2f playerPosition = game->GetPlayer()->GetPosition();
-	sf::Vector2f enemyToPlayer = playerPosition - position;
+	sf::Vector2f enemyToPlayer = game->GetPlayer()->GetPosition() - position;
+	//sf::Vector2f enemyToPlayer = playerPosition - position;
 
 	float length = sqrt(enemyToPlayer.x * enemyToPlayer.x +
 		enemyToPlayer.y * enemyToPlayer.y);

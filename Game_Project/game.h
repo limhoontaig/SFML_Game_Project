@@ -15,9 +15,7 @@ public:
 	void RunLoop(); // 게임 루프
 	void Shutdown(); // 종료 로직
 	Player* GetPlayer() { return player; }
-	std::vector <Enemy*> GetEnemies() { return enemies; }
-	std::vector <Bullet*> GetBullets() { return bullets; }
-
+	std::vector<Actor*> GetActors() const { return actors; }
 	sf::Texture& GetShipTexture() { return shipTexture; }
 	sf::Texture& GetProjectileTexture() { return projettileTexture; }
 
@@ -31,13 +29,7 @@ private:
 	int screenHeight = 450;
 	sf::RenderWindow window{ sf::VideoMode(screenWidth, screenHeight) , "Game"};
 
-	std::vector<Actor*> actors;
 	
-	// Game Data
-	Player* player;
-	std::vector <Enemy*> enemies;
-	std::vector <Bullet*> bullets;
-
 	sf::Texture shipTexture;
 	sf::Texture projettileTexture;
 
@@ -45,4 +37,13 @@ private:
 	float bulletFireTimer;
 	
 	sf::Clock deltaTimeClock;
+
+	// Game Data
+	
+	Player* player;
+	//std::vector <Enemy*> enemies;
+	//std::vector <Bullet*> bullets;
+	
+
+	std::vector<Actor*> actors;
 };

@@ -1,8 +1,8 @@
 #include "player.h"
 #include "game.h"
 
-Player::Player(Game* game, sf::Vector2f pos, float size, float speed)
-    : Actor {game, pos, speed, size}
+Player::Player(Game* game, ActorType type,  sf::Vector2f pos, float size, float speed)
+    : Actor {game, type, pos, speed, size}
 {
     shape.setTexture(game->GetShipTexture());
     shape.setTextureRect(sf::IntRect{ 8,0,8,8 }); // x, y, width, height

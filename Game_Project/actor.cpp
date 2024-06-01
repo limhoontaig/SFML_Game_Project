@@ -1,7 +1,7 @@
 #include "actor.h"
 
-Actor::Actor(Game* game, sf::Vector2f pos, float speed, float size)
-	:game{game}, position{pos}, speed{speed}, size{size}
+Actor::Actor(Game* game, ActorType type, sf::Vector2f pos, float speed, float size)
+	:game{game}, position{pos}, speed{speed}, size{size}, type{type}
 {
 
 }

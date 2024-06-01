@@ -4,16 +4,23 @@
 
 class Game;
 
+enum ActorType
+{
+	PLAYER, ENEMY, BULLET,
+};
+
 class Actor
 {
 public:
-	Actor(Game* game, sf::Vector2f pos, float speed, float size);
+	Actor(Game* game, ActorType type, sf::Vector2f pos, float speed, float size);
 	virtual ~Actor();
 	virtual void Update(float dt) = 0;
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f GetPosition() const { return position; }
+	ActorType GetActorType() const { return type; }
 protected:
 	Game* game;
+	ActorType type;
 	sf::Vector2f position;
 	float speed;
 	sf::Sprite shape;

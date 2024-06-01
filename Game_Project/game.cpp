@@ -8,9 +8,6 @@
 Game::Game()
 	:player{ nullptr }, bulletFirePeriod{0.0}, bulletFireTimer{0.0}
 {
-	enemies.clear();
-	bullets.clear();
-
 	actors.clear();
 }
 
@@ -47,36 +44,28 @@ void Game::RunLoop()
 
 void Game::Shutdown()
 {
-	// Player memort delete
-	delete player;
-
-	// enenies memory 해제
-	for (int i = 0; i < enemies.size(); i++)
+	for (int i = 0; i < actors.size(); i++)
 	{
-		delete enemies[i];
-	}
-
-	// Bullets 메모리해제
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		delete bullets[i];
-	}
+		delete actors[i];
+	}	
 }
 
 
 void Game::InitializeGame()
 {
 	// player create object
-	player = new Player{ this, sf::Vector2f{screenWidth / 2.0f, 
-		screenHeight / 2.0f}, 3.0f , 100.0f };
+	Player* player = new Player{ this, ActorType::PLAYER, sf::Vector2f{screenWidth / 2.0f, 
+		screenHeight / 2.0f}, 3.0f , 130.0f };
 	actors.push_back(player);
+	this->player = player;
 
 	// enemies
 	for (int i = 0; i < 10; i++)
 	{
 		sf::Vector2f enemyInitPosition = sf::Vector2f{ (float)(screenWidth - 100), 
 			(float)(rand() % screenHeight) };
-		actors.emplace_back(new Enemy{ this, enemyInitPosition, 3.0f, 100.0f });
+		actors.emplace_back(new Enemy{ this, ActorType::ENEMY, 
+			enemyInitPosition, 3.0f, 100.0f });
 	}
 
 	// Weapon (Bullet 신규 생성)
@@ -103,7 +92,7 @@ void Game::UpdateGame()
 	if (bulletFireTimer < 0.0f)
 	{
 		bulletFireTimer = bulletFirePeriod;	
-		actors.emplace_back(new Bullet{ this, 3.0f, 500.0f });
+		actors.emplace_back(new Bullet{ this, ActorType::BULLET, 3.0f, 500.0f });
 	}
 
 	for (int i = 0; i < actors.size(); i++)
