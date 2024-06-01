@@ -25,8 +25,11 @@ Enemy::Enemy()
 
 void Enemy::Update(float dt)
 {
-	UpdatePosition(dt);
-	shape.setPosition(position);
+	if (isActive && this->game->GetPlayer()->GetIsActive() == true)
+	{
+		UpdatePosition(dt);
+		shape.setPosition(position);
+	}
 }
 
 void Enemy::UpdatePosition(float dt)

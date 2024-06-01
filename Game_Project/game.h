@@ -18,32 +18,35 @@ public:
 	std::vector<Actor*> GetActors() const { return actors; }
 	sf::Texture& GetShipTexture() { return shipTexture; }
 	sf::Texture& GetProjectileTexture() { return projettileTexture; }
+	sf::Vector2i GetScreenSize() { return screenSize; }
 
 private:
 	void InitializeGame(); // 게임 내부 객체 생성
 	void ProcessInput();  // 게임 종료 탐지
 	void UpdateGame(); // 게임 내 움직이는 부분 
+	void SpawnBullet(float dt);  // 몇초에 한번씩 총알을 발사하는 부분
+	void SpawnEnemy(float dt);  // 몇초에 한번씩 적을 생성하는 부분
+	void CheckPlayerToEnemyCollision();
+	void CheckBulletToEnemyCollision();
 	void DrawGame();
 private:
 	int screenWidth = 800;
 	int screenHeight = 450;
 	sf::RenderWindow window{ sf::VideoMode(screenWidth, screenHeight) , "Game"};
-
-	
+	sf::Vector2i screenSize = sf::Vector2i{ screenWidth, screenHeight };
+		
 	sf::Texture shipTexture;
 	sf::Texture projettileTexture;
+
+	float enemyFirePeriod;
+	float enemyFireTimer;
 
 	float bulletFirePeriod;
 	float bulletFireTimer;
 	
 	sf::Clock deltaTimeClock;
 
-	// Game Data
-	
 	Player* player;
-	//std::vector <Enemy*> enemies;
-	//std::vector <Bullet*> bullets;
-	
 
 	std::vector<Actor*> actors;
 };

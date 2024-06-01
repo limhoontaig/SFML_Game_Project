@@ -2,6 +2,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
+#include <iostream>
 
 //class Player;
 
@@ -55,18 +56,13 @@ void Game::InitializeGame()
 {
 	// player create object
 	Player* player = new Player{ this, ActorType::PLAYER, sf::Vector2f{screenWidth / 2.0f, 
-		screenHeight / 2.0f}, 3.0f , 130.0f };
+		screenHeight / 2.0f}, 3.0f , 150.0f };
 	actors.push_back(player);
 	this->player = player;
 
-	// enemies
-	for (int i = 0; i < 10; i++)
-	{
-		sf::Vector2f enemyInitPosition = sf::Vector2f{ (float)(screenWidth - 100), 
-			(float)(rand() % screenHeight) };
-		actors.emplace_back(new Enemy{ this, ActorType::ENEMY, 
-			enemyInitPosition, 3.0f, 100.0f });
-	}
+	// enemies create period
+	enemyFirePeriod = (float) (rand() % 2) + 0.3f;
+	enemyFireTimer = enemyFirePeriod;
 
 	// Weapon (Bullet ½Å±Ô »ý¼º)
 	bulletFirePeriod = 1.0f;
@@ -86,20 +82,88 @@ void Game::ProcessInput()
 void Game::UpdateGame()
 {
 	float dt = deltaTimeClock.restart().asSeconds();
+	
+	SpawnEnemy(dt);
 
-	// Logic Update
-	bulletFireTimer -= dt;
-	if (bulletFireTimer < 0.0f)
-	{
-		bulletFireTimer = bulletFirePeriod;	
-		actors.emplace_back(new Bullet{ this, ActorType::BULLET, 3.0f, 500.0f });
-	}
+	SpawnBullet(dt);	
 
 	for (int i = 0; i < actors.size(); i++)
 	{
 		actors[i]->Update(dt);
 	}
+	CheckBulletToEnemyCollision();
+	CheckPlayerToEnemyCollision();
+}
 
+void Game::SpawnBullet(float dt)
+{
+	// Logic Update
+	bulletFireTimer -= dt;
+	if (bulletFireTimer < 0.0f)
+	{
+		bulletFireTimer = bulletFirePeriod;
+		actors.emplace_back(new Bullet{ this, ActorType::BULLET, 3.0f, 500.0f });
+	}
+}
+
+void Game::SpawnEnemy(float dt)
+{
+	enemyFireTimer -= dt;
+	if (enemyFireTimer < 0.0f)
+	{
+		enemyFireTimer = enemyFirePeriod;
+		sf::Vector2f enemyInitPosition = sf::Vector2f{ (float)(rand() % screenWidth),
+			(float)(rand() % screenHeight) };
+		actors.emplace_back(new Enemy{ this, ActorType::ENEMY,
+			enemyInitPosition, 3.0f, 100.0f });
+	}
+}
+
+void Game::CheckPlayerToEnemyCollision()
+{
+	for (int i = 0; i < actors.size(); i++)
+	{
+		if (actors[i]->GetActorType() == ENEMY)
+		{
+			sf::Vector2f enemyPos = actors[i]->GetPosition();
+			sf::Vector2f playerToEnemyPos = enemyPos - player->GetPosition();
+			float dist = sqrt(playerToEnemyPos.x * playerToEnemyPos.x +
+				playerToEnemyPos.y * playerToEnemyPos.y);
+			if (dist < 0.5f)
+			{
+				// player collision to enemy
+				player->SetIsActive(false);
+			}
+
+		}
+	}
+}
+
+void Game::CheckBulletToEnemyCollision()
+{
+	for (int i = 0; i < actors.size(); i++)
+	{
+		for (int j = 0; j < actors.size(); j++) {
+			if (actors[i]->GetActorType() == ActorType::BULLET &&
+				actors[j]->GetActorType() == ActorType::ENEMY)
+			{
+				if (actors[i]->GetIsActive() == false || actors[j]->GetIsActive() == false)
+					continue;
+				sf::Vector2f bulletPos = actors[i]->GetPosition();
+				sf::Vector2f enemyPos = actors[j]->GetPosition();
+
+				sf::Vector2f bulletToEnemyPos = bulletPos - enemyPos;
+				float dist = sqrt(bulletToEnemyPos.x * bulletToEnemyPos.x +
+					bulletToEnemyPos.y * bulletToEnemyPos.y);
+				if (dist < 0.5f)
+				{
+					// Àû°ú ÃÑ¾ËÀÌ ºÎµúÈû
+					actors[i]->SetIsActive(false);
+					actors[j]->SetIsActive(false);
+				}
+			}
+		}
+	}
 }
 
 void Game::DrawGame()

@@ -18,9 +18,12 @@ public:
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f GetPosition() const { return position; }
 	ActorType GetActorType() const { return type; }
+	bool GetIsActive() const { return isActive; }
+	void SetIsActive(bool active) { isActive = active; }
 protected:
 	Game* game;
 	ActorType type;
+	bool isActive;
 	sf::Vector2f position;
 	float speed;
 	sf::Sprite shape;
