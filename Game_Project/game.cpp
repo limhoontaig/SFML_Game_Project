@@ -1,5 +1,3 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include "game.h"
 #include "player.h"
 #include "enemy.h"
@@ -8,14 +6,18 @@
 //class Player;
 
 Game::Game()
-	:player{ nullptr }
+	:player{ nullptr }, bulletFirePeriod{0.0}, bulletFireTimer{0.0}
 {
 	enemies.clear();
 	bullets.clear();
+
+	actors.clear();
 }
 
 bool Game::Initialize()
 {
+	// Initialze SFML System
+	
 	// INITTIALIZE RESOURCES
 	if (!shipTexture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png"))
 	{
@@ -26,9 +28,9 @@ bool Game::Initialize()
 		return false;
 	}
 
-
-
+	//Initialze Game
 	InitializeGame();
+
 	return true;
 }
 
@@ -65,22 +67,21 @@ void Game::Shutdown()
 void Game::InitializeGame()
 {
 	// player create object
-	player = new Player{ this, sf::Vector2f{50.0f, 50.0f}, 3.0f ,
-		300.0f, screenWidth, screenHeight };
+	player = new Player{ this, sf::Vector2f{screenWidth / 2.0f, 
+		screenHeight / 2.0f}, 3.0f , 100.0f };
+	actors.push_back(player);
 
 	// enemies
 	for (int i = 0; i < 10; i++)
 	{
-		float enemyRandomX = (screenWidth - 100); // rand() %
-		float enemyRandomY = rand() % screenHeight;
-		sf::Vector2f enemyPos{ enemyRandomX, enemyRandomY };
-
-		Enemy* e = new Enemy{ this, enemyPos, 3.0f, 0.02f };
-		enemies.push_back(e);
+		sf::Vector2f enemyInitPosition = sf::Vector2f{ (float)(screenWidth - 100), 
+			(float)(rand() % screenHeight) };
+		actors.emplace_back(new Enemy{ this, enemyInitPosition, 3.0f, 100.0f });
 	}
 
-	// 重鋭 Bullet 持失
+	// Weapon (Bullet 重鋭 持失)
 	bulletFirePeriod = 1.0f;
+	bulletFireTimer = bulletFirePeriod;
 }
 
 void Game::ProcessInput()
@@ -97,48 +98,29 @@ void Game::UpdateGame()
 {
 	float dt = deltaTimeClock.restart().asSeconds();
 
+	// Logic Update
 	bulletFireTimer -= dt;
-	if (bulletFireTimer < 0)
+	if (bulletFireTimer < 0.0f)
 	{
-		Bullet* b = new Bullet{ this, 5.0f, 500.0f };
-		bullets.push_back(b);
-
 		bulletFireTimer = bulletFirePeriod;	
+		actors.emplace_back(new Bullet{ this, 3.0f, 500.0f });
 	}
 
-	// Player Update
-	player->Update(dt);
-
-	// Enemy Update
-	for (int i = 0; i < enemies.size(); i++)
+	for (int i = 0; i < actors.size(); i++)
 	{
-		enemies[i]->Update(dt);
+		actors[i]->Update(dt);
 	}
 
-	// Bullet Update
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		bullets[i]->Update(dt);
-	}
 }
 
 void Game::DrawGame()
 {
 	window.clear();
-
-	// Player Draw
-	player->Draw(window);
-
-	// Enemy Draw
-	for (int i = 0; i < enemies.size(); i++)
 	{
-		(*enemies[i]).Draw(window);
-	}
-
-	//Bullet Draw
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		(*bullets[i]).Draw(window);
+		for (int i = 0; i < actors.size(); i++)
+		{
+			actors[i]->Draw(window);
+		}
 	}
 
 	window.display();

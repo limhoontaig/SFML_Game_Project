@@ -5,6 +5,7 @@
 class Player;
 class Enemy;
 class Bullet;
+class Actor;
 
 class Game
 {
@@ -30,18 +31,18 @@ private:
 	int screenHeight = 450;
 	sf::RenderWindow window{ sf::VideoMode(screenWidth, screenHeight) , "Game"};
 
-	float bulletFirePeriod;
-	float bulletFireTimer;
+	std::vector<Actor*> actors;
 	
-	sf::Clock deltaTimeClock;
-
-	sf::Texture shipTexture;
-	sf::Texture projettileTexture;
-
 	// Game Data
 	Player* player;
 	std::vector <Enemy*> enemies;
 	std::vector <Bullet*> bullets;
 
+	sf::Texture shipTexture;
+	sf::Texture projettileTexture;
 
+	float bulletFirePeriod;
+	float bulletFireTimer;
+	
+	sf::Clock deltaTimeClock;
 };

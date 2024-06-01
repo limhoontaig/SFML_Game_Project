@@ -6,9 +6,8 @@ Actor::Actor(Game* game, sf::Vector2f pos, float speed, float size)
 
 }
 
-void Actor::Update(float dt)
+Actor::~Actor()
 {
-
 }
 
 void Actor::Draw(sf::RenderWindow& window)

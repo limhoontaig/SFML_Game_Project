@@ -1,14 +1,15 @@
 ﻿#define _CRTDBG_MAP_ALLOC
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <vector>
+#include <cstdlib>
+#include <crtdbg.h>
 
-#include "game.h"
 #ifdef _DEBUG
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #else
 #define DBG_NEW new
 #endif
+
+#include <SFML/Graphics.hpp>
+#include "game.h"
 
 
 int main()
@@ -17,9 +18,11 @@ int main()
 
     {
         Game game;
-        game.Initialize();
-        game.RunLoop();
-
+        bool success = game.Initialize();
+        if (success)
+        {
+            game.RunLoop();
+        }
         game.Shutdown();
     }    
    

@@ -1,54 +1,44 @@
 #include "player.h"
 #include "game.h"
 
-Player::Player(Game* game, sf::Vector2f pos, float size,  
-    float speed, int screenWidth, int screenHeight)
-    : Actor {game, pos, speed, size},
-    screenWidth(screenWidth), screenHeight(screenHeight)
+Player::Player(Game* game, sf::Vector2f pos, float size, float speed)
+    : Actor {game, pos, speed, size}
 {
-    
     shape.setTexture(game->GetShipTexture());
     shape.setTextureRect(sf::IntRect{ 8,0,8,8 }); // x, y, width, height
 
     shape.setScale(sf::Vector2f{ size, size });
+    sf::FloatRect bounds = shape.getLocalBounds();
+    shape.setOrigin(std::floor(bounds.left + bounds.width / 2.f),
+        std::floorf(bounds.top + bounds.height / 2.f));
+}
 
+Player::~Player()
+{
 }
 
 void Player::Update(float dt)
 {
-    shape.setPosition(position);
     ProcessInput(dt);
+    shape.setPosition(position);
 }
-
 
 void Player::ProcessInput(float dt)
 {
-    bool pressedLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-    bool pressedRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-    bool pressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-    bool pressedDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
-    if (pressedLeft)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        position.x -= speed * dt;// *gameFactor;
-        if (position.x <= 0)
-            position.x = 0.0;
+        position.x -= speed * dt;
     }
-    if (pressedRight)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        position.x += speed * dt;// * gameFactor;
-        if (position.x >= screenWidth - size)
-            position.x = screenWidth - size;
+        position.x += speed * dt;
     }
-    if (pressedUp)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        position.y -= speed * dt;// * gameFactor;
-        if (position.y <= 0)
-            position.y = 0.0;
+        position.y -= speed * dt;
     }
-    if (pressedDown)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        position.y += speed * dt;// * gameFactor;
-        if (position.y >= screenHeight - size)
-            position.y = screenHeight - size;
+        position.y += speed * dt;
     }
 }

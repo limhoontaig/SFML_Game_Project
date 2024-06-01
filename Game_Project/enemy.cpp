@@ -1,20 +1,27 @@
+#include "game.h"
 #include "enemy.h"
 #include "player.h"
-#include "game.h"
 
 Enemy::Enemy(Game* game, const sf::Vector2f pos, float size, float speed)
-	:game{ game }, position { pos }, size{ size }, speed{ speed }
+	: Actor{ game, pos , speed, size }
 {
 	shape.setTexture(game->GetShipTexture());
 	shape.setTextureRect(sf::IntRect{ 40,0,8,8 });
 	
 	shape.setScale(sf::Vector2f{ size, size });
+	sf::FloatRect bounds = shape.getLocalBounds();
+	shape.setOrigin(std::floor(bounds.left + bounds.width / 2.0f),
+		std::floorf(bounds.top + bounds.height / 2.f));
 }
 
-Enemy::Enemy()
+Enemy::~Enemy()
 {
 }
 
+Enemy::Enemy()
+	: Enemy{nullptr, sf::Vector2f{0,0}, 1.0f, 1.0f}
+{
+}
 
 void Enemy::Update(float dt)
 {
@@ -22,29 +29,16 @@ void Enemy::Update(float dt)
 	shape.setPosition(position);
 }
 
-void Enemy::Draw(sf::RenderWindow& window)
-{
-	window.draw(shape);
-}
-
-sf::Vector2f Enemy::GetPosition() const
-{
-	return sf::Vector2f(position);
-}
-
-
 void Enemy::UpdatePosition(float dt)
 {	
-	float enemyToPlayerX = game->GetPlayer()->GetPosition().x - position.x;
-	float enemyToPlayerY = game->GetPlayer()->GetPosition().y - position.y;
+	sf::Vector2f playerPosition = game->GetPlayer()->GetPosition();
+	sf::Vector2f enemyToPlayer = playerPosition - position;
 
-	float length = sqrt(enemyToPlayerX * enemyToPlayerX +
-		enemyToPlayerY * enemyToPlayerY);
+	float length = sqrt(enemyToPlayer.x * enemyToPlayer.x +
+		enemyToPlayer.y * enemyToPlayer.y);
 
-	enemyToPlayerX /= length;
-	enemyToPlayerY /= length;
+	enemyToPlayer /= length;
 
-	position.x += enemyToPlayerX * speed;
-	position.y += enemyToPlayerY * speed;
+	position += enemyToPlayer * speed * dt;
 }
 

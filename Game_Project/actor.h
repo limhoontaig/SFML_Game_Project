@@ -8,7 +8,8 @@ class Actor
 {
 public:
 	Actor(Game* game, sf::Vector2f pos, float speed, float size);
-	void Update(float dt);
+	virtual ~Actor();
+	virtual void Update(float dt) = 0;
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f GetPosition() const { return position; }
 protected:
@@ -17,5 +18,4 @@ protected:
 	float speed;
 	sf::Sprite shape;
 	float size;
-
 };
