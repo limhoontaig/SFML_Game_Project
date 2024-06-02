@@ -10,5 +10,5 @@ private:
 	float speed;
 
 	sf::RectangleShape shape;
-	float size
+	float size;
 };
