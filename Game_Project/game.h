@@ -6,6 +6,7 @@ class Player;
 class Enemy;
 class Bullet;
 class Actor;
+class TextDisplay;
 
 class Game
 {
@@ -19,6 +20,7 @@ public:
 	sf::Texture& GetShipTexture() { return shipTexture; }
 	sf::Texture& GetProjectileTexture() { return projettileTexture; }
 	sf::Vector2i GetScreenSize() { return screenSize; }
+	sf::Font& GetFont() { return font; }
 
 private:
 	void InitializeGame(); // 霸烙 郴何 按眉 积己
@@ -38,6 +40,8 @@ private:
 	sf::Texture shipTexture;
 	sf::Texture projettileTexture;
 
+	sf::Font font;
+	
 	float enemyFirePeriod;
 	float enemyFireTimer;
 

@@ -2,12 +2,13 @@
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "textDisplay.h"
 #include <iostream>
 
 //class Player;
 
 Game::Game()
-	:player{ nullptr }, bulletFirePeriod{0.0}, bulletFireTimer{0.0}
+	:player{ nullptr }, bulletFirePeriod{ 0.0 }, bulletFireTimer{ 0.0 }, enemyFirePeriod{ 0.0 }, enemyFireTimer{0.0}
 {
 	actors.clear();
 }
@@ -25,6 +26,11 @@ bool Game::Initialize()
 	{
 		return false;
 	}
+	
+	if (!font.loadFromFile("../resources/font/arial.ttf"))
+	{
+		return false;
+	}
 
 	//Initialze Game
 	InitializeGame();
@@ -36,9 +42,9 @@ void Game::RunLoop()
 {
 	while (window.isOpen())
 	{
-		ProcessInput();
-		UpdateGame();
-		DrawGame();
+		//ProcessInput();
+		//UpdateGame();
+		//DrawGame();
 	}
 
 }
@@ -54,6 +60,7 @@ void Game::Shutdown()
 
 void Game::InitializeGame()
 {
+
 	// player create object
 	Player* player = new Player{ this, ActorType::PLAYER, sf::Vector2f{screenWidth / 2.0f, 
 		screenHeight / 2.0f}, 3.0f , 150.0f };

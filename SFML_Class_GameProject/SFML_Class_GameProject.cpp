@@ -1,20 +1,60 @@
-﻿// SFML_Class_GameProject.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
-
+﻿#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <SFML/graphics.h>
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    // 화면을 그릴 윈도우 생성
+    sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
+
+    // 글을 표시하고 싶을 경우 폰트 로딩 필요
+    sf::Font font;
+    if (!font.loadFromFile("../resources/font/arial.ttf"))
+    {
+        std::cout << "Font Loading Error!" << std::endl;
+    }
+
+    // 화면에 그릴 원 객체 생성
+    sf::CircleShape shape(100.f);
+    shape.setPosition(sf::Vector2f{ 150.f,100.f });
+    shape.setFillColor(sf::Color::Green);
+
+    // 화면에 그릴 텍스트 객체 생성
+    sf::Text text;
+    text.setFont(font);
+    text.setString("Hello SFML!");
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(1024.f / 2, 768.f / 2));
+
+    // 윈도우가 열려 있을 동안 반복
+    while (window.isOpen())
+    {
+        // 종료 조건
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        //--- 화면을 그리는 세 단계
+
+        // 1) 이미 그려져 있는 모든 것을 지운다.
+        window.clear();
+
+        // 2) 그리고 싶은 것들을 draw 함수를 사용해 그린다.
+        window.draw(shape);
+        window.draw(text);
+
+        // 3) 화면에 표시한다.
+        window.display();
+    }
+
+    return 0;
 }
 
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
+//--- Practice
 
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
+// 1. 화면의 크기를 더 크게, 또는 더 작게 만들어 보세요.
+// 2. 원을 화면의 다른 위치에, 다른 크기로 만들어 보세요.
+// 3. 원 개신 사각형을 화면에 그려 보세요. (https://www.sfml-dev.org/documentation/2.6.0/classsf_1_1RectangleShape.php)

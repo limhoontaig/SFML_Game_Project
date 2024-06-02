@@ -1,5 +1,6 @@
 #include "player.h"
 #include "game.h"
+#include "textDisplay.h"
 
 Player::Player(Game* game, ActorType type,  sf::Vector2f pos, float size, float speed)
     : Actor {game, type, pos, speed, size}
@@ -23,6 +24,9 @@ void Player::Update(float dt)
     {
         ProcessInput(dt);
         shape.setPosition(position);
+    }
+    else
+    {
     }
 }
 
