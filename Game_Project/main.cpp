@@ -31,7 +31,7 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     // 화면을 그릴 윈도우 생성
-    sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(800, 450), "SFML works!");
 
     // 글을 표시하고 싶을 경우 폰트 로딩 필요
     sf::Font font;
@@ -50,11 +50,11 @@ int main()
     
     float interval = 0.0f;
 
-    TextPrint(text2, font, 30.0f, 200.0f, 100.0f,
-        sf::Color::Red, sf::Color::Cyan, "This is a Galaxy Shooter Game.");
-    TextPrint(text1, font, 56.0f, 200.0f, 150.0f,
+    TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
+        sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
+    TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
         sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
-    TextPrint(text3, font, 100.0f, 200.0f, 250.0f,
+    TextPrint(text3, font, 100.0f, 50.0f, 200.0f,
         sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
 
     // 윈도우가 열려 있을 동안 반복
