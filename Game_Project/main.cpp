@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <crtdbg.h>
+#include <cstdlib>
 
 #ifdef _DEBUG
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -31,7 +32,7 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     // 화면을 그릴 윈도우 생성
-    sf::RenderWindow window(sf::VideoMode(800, 450), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(800, 550), "SFML works!");
 
     // 글을 표시하고 싶을 경우 폰트 로딩 필요
     sf::Font font;
@@ -46,9 +47,12 @@ int main()
     shape.setFillColor(sf::Color::Green);
 
     // 화면에 그릴 텍스트 객체 생성
-    sf::Text text1, text2, text3;
+    sf::Text text1, text2, text3, textScoreTitle, textScore ;
     
     float interval = 0.0f;
+    int gameScore = 30000;
+    
+
 
     TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
         sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
@@ -56,6 +60,11 @@ int main()
         sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
     TextPrint(text3, font, 100.0f, 50.0f, 200.0f,
         sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
+    TextPrint(textScoreTitle, font, 20.0f, 50.0f, 500.0f,
+        sf::Color::Yellow, sf::Color::Blue, "GAME Score: ");
+    TextPrint(textScore, font, 20.0f, 180.0f, 500.0f, 
+        sf::Color::Yellow, sf::Color::Blue, std::to_string(gameScore));
+
 
     // 윈도우가 열려 있을 동안 반복
     while (window.isOpen())
@@ -83,6 +92,8 @@ int main()
         window.draw(text1);
         window.draw(text2);
         window.draw(text3);
+        window.draw(textScoreTitle);
+        window.draw(textScore);
 
         // 3) 화면에 표시한다.
         window.display();
