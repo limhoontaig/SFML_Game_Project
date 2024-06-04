@@ -13,8 +13,9 @@
 #include <SFML/Graphics.hpp>
 //#include <SFML/Graphics/Text.hpp>
 #include "game.h"
+class Game;
 
-int TextPrint(sf::Text& textMsg, sf::Font& font, int size, float x, 
+void TextPrint(sf::Text& textMsg, sf::Font& font, int size, float x, 
     float y, const sf::Color& color, sf::Color outColor, sf::String p)
 {
     textMsg.setFont(font); //폰트 
@@ -24,7 +25,6 @@ int TextPrint(sf::Text& textMsg, sf::Font& font, int size, float x,
     textMsg.setOutlineColor(outColor); //글자 테두리 색
     textMsg.setOutlineThickness(1.f); //글자 테두리 굵기
     textMsg.setString(p); //출력할 문자열
-    return 0;
 }
 
 int main()
@@ -40,6 +40,7 @@ int main()
     {
         std::cout << "Font Loading Error!" << std::endl;
     }
+    Game;
 
     // 화면에 그릴 원 객체 생성
     sf::CircleShape shape(100.f);
@@ -54,18 +55,7 @@ int main()
     
 
 
-    TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
-        sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
-    TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
-        sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
-    TextPrint(text3, font, 100.0f, 50.0f, 200.0f,
-        sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
-    TextPrint(textScoreTitle, font, 20.0f, 50.0f, 500.0f,
-        sf::Color::Yellow, sf::Color::Blue, "GAME Score: ");
-    TextPrint(textScore, font, 20.0f, 180.0f, 500.0f, 
-        sf::Color::Yellow, sf::Color::Blue, std::to_string(gameScore));
-
-
+    
     // 윈도우가 열려 있을 동안 반복
     while (window.isOpen())
     {
@@ -79,8 +69,19 @@ int main()
 
         sf::Clock clock;
         float time = clock.getElapsedTime().asSeconds();
+
         clock.restart();
         interval += time;
+        TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
+            sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
+        TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
+            sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
+        TextPrint(text3, font, 100.0f, 50.0f, 200.0f,
+            sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
+        TextPrint(textScoreTitle, font, 20.0f, 50.0f, 500.0f,
+            sf::Color::Yellow, sf::Color::Blue, "GAME Score: ");
+        TextPrint(textScore, font, 20.0f, 180.0f, 500.0f, 
+            sf::Color::Yellow, sf::Color::Blue, std::to_string(interval*1000));
 
         //--- 화면을 그리는 세 단계
 
@@ -89,9 +90,12 @@ int main()
 
         // 2) 그리고 싶은 것들을 draw 함수를 사용해 그린다.
         //window.draw(shape);
-        window.draw(text1);
-        window.draw(text2);
-        window.draw(text3);
+        if (interval * 1000 < 1.5)
+        {
+            window.draw(text1);
+            window.draw(text2);
+            window.draw(text3);
+        }
         window.draw(textScoreTitle);
         window.draw(textScore);
 
