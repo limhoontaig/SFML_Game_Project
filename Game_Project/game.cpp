@@ -1,4 +1,4 @@
-#include "game.h"
+﻿#include "game.h"
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
@@ -42,9 +42,9 @@ void Game::RunLoop()
 {
 	while (window.isOpen())
 	{
-		//ProcessInput();
-		//UpdateGame();
-		//DrawGame();
+		ProcessInput();
+		UpdateGame();
+		DrawGame();
 	}
 
 }
@@ -71,7 +71,7 @@ void Game::InitializeGame()
 	enemyFirePeriod = (float) (rand() % 2) + 0.3f;
 	enemyFireTimer = enemyFirePeriod;
 
-	// Weapon (Bullet �ű� ����)
+	// Weapon (Bullet 신규 생성)
 	bulletFirePeriod = 1.0f;
 	bulletFireTimer = bulletFirePeriod;
 }
@@ -89,6 +89,25 @@ void Game::ProcessInput()
 void Game::UpdateGame()
 {
 	float dt = deltaTimeClock.restart().asSeconds();
+	float time = deltaTimeClock.getElapsedTime().asSeconds();
+
+	if (player->GetIsActive() == true)
+		elapsedTime += time * 1000;
+
+	TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
+		sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
+	TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
+		sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
+	TextPrint(text3, font, 100.0f, 50.0f, 160.0f,
+		sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
+	TextPrint(textElapsedTimeTitle, font, 20.0f, 50.0f, 500.0f,
+		sf::Color::Yellow, sf::Color::Blue, "Time to Go: ");
+	TextPrint(textScoreTitle, font, 20.0f, 350.0f, 500.0f,
+		sf::Color::Yellow, sf::Color::Blue, "GAME Score: ");
+	TextPrint(textElapsedTime, font, 20.0f, 190.0f, 500.0f,
+		sf::Color::Yellow, sf::Color::Blue, std::to_string(elapsedTime * 100));
+	TextPrint(textScore, font, 20.0f, 500.0f, 500.0f,
+		sf::Color::Yellow, sf::Color::Blue, std::to_string(gameScore));
 	
 	SpawnEnemy(dt);
 
@@ -164,9 +183,10 @@ void Game::CheckBulletToEnemyCollision()
 					bulletToEnemyPos.y * bulletToEnemyPos.y);
 				if (dist < 0.5f)
 				{
-					// ���� �Ѿ��� �ε���
+					// 적과 총알이 부딪힘
 					actors[i]->SetIsActive(false);
 					actors[j]->SetIsActive(false);
+					gameScore += 1000;
 				}
 			}
 		}
@@ -177,11 +197,38 @@ void Game::DrawGame()
 {
 	window.clear();
 	{
-		for (int i = 0; i < actors.size(); i++)
+		if (elapsedTime < 1.5 && elapsedTime > 0)
+			window.draw(text2);
+		if (elapsedTime < 1.5 && elapsedTime > 0.5f)
+			window.draw(text1);
+		if (elapsedTime < 1.5 && elapsedTime > 1.0f)
+			window.draw(text3);
+		window.draw(textElapsedTimeTitle);
+		window.draw(textElapsedTime);
+		window.draw(textScoreTitle);
+		window.draw(textScore);
+		
+		if (elapsedTime > 1.5)
 		{
-			actors[i]->Draw(window);
+			for (int i = 0; i < actors.size(); i++)
+			{
+				actors[i]->Draw(window);
+			}
+
 		}
 	}
 
 	window.display();
+}
+
+void Game::TextPrint(sf::Text& textMsg, sf::Font& font, int size, float x,
+	float y, const sf::Color& color, sf::Color outColor, sf::String p)
+{
+	textMsg.setFont(font); //폰트 
+	textMsg.setCharacterSize(size); //크기
+	textMsg.setPosition(x, y); //x, y 위치
+	textMsg.setFillColor(color); //색    
+	textMsg.setOutlineColor(outColor); //글자 테두리 색
+	textMsg.setOutlineThickness(1.f); //글자 테두리 굵기
+	textMsg.setString(p); //출력할 문자열
 }

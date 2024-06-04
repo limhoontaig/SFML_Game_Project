@@ -31,9 +31,11 @@ private:
 	void CheckPlayerToEnemyCollision();
 	void CheckBulletToEnemyCollision();
 	void DrawGame();
+	void TextPrint(sf::Text&, sf::Font&, int, float,
+		float, const sf::Color&, sf::Color, sf::String);
 private:
 	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenHeight = 550;
 	sf::RenderWindow window{ sf::VideoMode(screenWidth, screenHeight) , "Game"};
 	sf::Vector2i screenSize = sf::Vector2i{ screenWidth, screenHeight };
 		
@@ -41,6 +43,10 @@ private:
 	sf::Texture projettileTexture;
 
 	sf::Font font;
+	sf::Text text1, text2, text3, textScoreTitle, textScore, textElapsedTimeTitle, textElapsedTime;
+
+	float elapsedTime;
+	int gameScore;
 	
 	float enemyFirePeriod;
 	float enemyFireTimer;
