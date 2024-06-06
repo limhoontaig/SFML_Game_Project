@@ -134,6 +134,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Npc.cpp" />
+    <ClCompile Include="NPC_Set.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Npc.h" />
+    <ClInclude Include="NPC_Set.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,36 +1,36 @@
+#define _CRTDBG_MAP_ALLOC
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#else
+#define DBG_NEW new
+#endif
+
+#include "Npc.h"
+#include "NPC_Set.h"
+
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	sf::RenderWindow window(sf::VideoMode(600, 500), "SFML Works!");
 	window.setFramerateLimit(120);
 
 	// player
-	sf::CircleShape shape(50.0f);
+	sf::CircleShape shape(20.0f);
 	shape.setFillColor(sf::Color::Yellow);
 	shape.setPosition(300.0f, 450.0f);
 
+	// Bullet
+	sf::CircleShape bullet(5.0f);
+	bullet.setFillColor(sf::Color::Red);
+	bool showBullet = false;
 
 
-	// target
-	std::vector<sf::RectangleShape> npcs(4);
-
-	int inc = 0;
-	for (auto& _e : npcs)
-	{
-		_e.setSize(sf::Vector2f{ 30.0f, 10.0f });
-		_e.setFillColor(sf::Color::Cyan);
-		_e.setPosition(30.0f+inc, 30.0f+inc);
-		inc += 20.0f;
-	}
-
-	sf::RectangleShape myRect(sf::Vector2f{ 50.0f, 10.0f });
-	myRect.setFillColor(sf::Color::Cyan);
-	myRect.setPosition(sf::Vector2f{ 100.0f, 50.0f });
-		
-	float offset_x = 1.0f;
+	NPC_Set npcs(10);
 
 	while (window.isOpen())
 	{
@@ -54,30 +54,24 @@ int main()
 		}
 
 
-		for (auto& _e:npcs)
-		{ 
-			sf::Vector2f pos = _e.getPosition();
-			if (pos.x > 600.0f)
-			{
-				offset_x = - (float)((rand() % 10) + 1.0f);
-			}
-			else if (pos.x < 30.0f)
-			{
-				offset_x = (float)((rand() % 10) + 1.0f);
-			}
+		npcs.update();
 
-			_e.move(offset_x, 0);
+		// bullet update
+		if (showBullet == true)
+		{
+			bullet.move(0.0f, -8.0f);
 		}
 
 		window.clear();
 		window.draw(shape);
-		for (auto& _e : npcs)
+		npcs.draw(window);
+		if (showBullet == true)
 		{
-			window.draw(_e);
-
+			window.draw(bullet);
 		}
 		window.display();
 
 	}
+	
 	return 0;
 }
