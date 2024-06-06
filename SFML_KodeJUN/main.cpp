@@ -52,7 +52,14 @@ int main()
 			if (shape.getPosition().x > 500)
 				shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
 		}
-
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			bullet.setPosition(shape.getPosition().x + 20, shape.getPosition().y);
+			showBullet = true;
+			bullet.move(+1.0f, 0.0f);
+			if (shape.getPosition().x > 500)
+				shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
+		}
 
 		npcs.update();
 
