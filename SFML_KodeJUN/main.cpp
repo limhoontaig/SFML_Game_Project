@@ -33,32 +33,17 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			shape.move(-1.0f, 0.0f);
-			if (shape.getPosition().x < 0)
-				shape.setPosition(sf::Vector2f{ 0.0f, 450.0f });
-		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			shape.move(+1.0f, 0.0f);
-			if (shape.getPosition().x > 500)
-				shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
-		}
+			gun.moveRight();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			gun.moveLeft();
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{	
-			if (showBullet == false) 
-			{
-				bullet.setPosition(shape.getPosition().x + 20, shape.getPosition().y);
-				bullet.move(+1.0f, 0.0f);
-				showBullet = true;
-			}
-		}
+			gun.bulletSpawn();
 
 		npcs.update();
 
 		// bullet update
-		if (bullet.getPosition().y < 0.0f)
+		if (gun.getPosition().y < 0.0f)
 			showBullet = false;// shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
 		if (showBullet == true)
 		{
