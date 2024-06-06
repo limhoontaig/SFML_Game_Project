@@ -133,11 +133,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Npc.cpp" />
     <ClCompile Include="NPC_Set.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Npc.h" />
     <ClInclude Include="NPC_Set.h" />
   </ItemGroup>

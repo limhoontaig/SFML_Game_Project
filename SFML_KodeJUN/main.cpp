@@ -11,6 +11,7 @@
 
 #include "Npc.h"
 #include "NPC_Set.h"
+#include "Gun.h"
 
 int main()
 {
@@ -19,18 +20,10 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(600, 500), "SFML Works!");
 	window.setFramerateLimit(120);
 
-	// player
-	sf::CircleShape shape(20.0f);
-	shape.setFillColor(sf::Color::Yellow);
-	shape.setPosition(300.0f, 450.0f);
-
-	// Bullet
-	sf::CircleShape bullet(5.0f);
-	bullet.setFillColor(sf::Color::Red);
-	bool showBullet = false;
-
-
 	NPC_Set npcs(10);
+	Gun gun;
+
+
 
 	while (window.isOpen())
 	{
@@ -53,17 +46,20 @@ int main()
 				shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{
-			bullet.setPosition(shape.getPosition().x + 20, shape.getPosition().y);
-			showBullet = true;
-			bullet.move(+1.0f, 0.0f);
-			if (shape.getPosition().x > 500)
-				shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
+		{	
+			if (showBullet == false) 
+			{
+				bullet.setPosition(shape.getPosition().x + 20, shape.getPosition().y);
+				bullet.move(+1.0f, 0.0f);
+				showBullet = true;
+			}
 		}
 
 		npcs.update();
 
 		// bullet update
+		if (bullet.getPosition().y < 0.0f)
+			showBullet = false;// shape.setPosition(sf::Vector2f{ 500.0f, 450.0f });
 		if (showBullet == true)
 		{
 			bullet.move(0.0f, -8.0f);
