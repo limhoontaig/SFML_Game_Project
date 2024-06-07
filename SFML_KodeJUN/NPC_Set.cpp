@@ -7,9 +7,9 @@ NPC_Set::NPC_Set(int num)
 	for (int i = 0; i < num; i++)
 	{
 		int inc = rand()% 300;
-		NPC npc(30.0f + inc, 30.0f + inc, (i + 1) , colors[i%4]);
+		NPC npc(30.0f + inc, 30.0f + inc, (float)(i + 1) , colors[i%4]);
 		npcs.push_back(npc);
-		inc += 20.0f;
+		inc += 20;
 	}
 }
 

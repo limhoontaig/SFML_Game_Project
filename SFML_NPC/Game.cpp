@@ -8,7 +8,7 @@
 //class Player;
 
 Game::Game()
-	:player{ nullptr }, bulletFirePeriod{ 0.0 }, bulletFireTimer{ 0.0 }, enemyFirePeriod{ 0.0 }, enemyFireTimer{ 0.0 }
+	:player{ nullptr }, bulletFirePeriod{ 0.0 }, bulletFireTimer{ 0.0 }, enemyFirePeriod{ 0.0 }, enemyFireTimer{ 0.0 }, elapsedTime {0.0}, gameScore{0}
 {
 	actors.clear();
 }
@@ -72,7 +72,7 @@ void Game::InitializeGame()
 	enemyFireTimer = enemyFirePeriod;
 
 	// Weapon (Bullet 신규 생성)
-	bulletFirePeriod = 1.0f;
+	bulletFirePeriod = 0.1f;
 	bulletFireTimer = bulletFirePeriod;
 }
 
@@ -94,19 +94,19 @@ void Game::UpdateGame()
 	if (player->GetIsActive() == true)
 		elapsedTime += time * 1000;
 
-	TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
+	TextPrint(text2, font, 30, 50.0f, 50.0f,
 		sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
-	TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
+	TextPrint(text1, font, 56, 50.0f, 100.0f,
 		sf::Color::Magenta, sf::Color::White, "Enjoy Your Spare Time!");
-	TextPrint(text3, font, 100.0f, 50.0f, 160.0f,
+	TextPrint(text3, font, 100, 50.0f, 160.0f,
 		sf::Color::Yellow, sf::Color::Blue, "GAME START!!!");
-	TextPrint(textElapsedTimeTitle, font, 20.0f, 50.0f, 500.0f,
+	TextPrint(textElapsedTimeTitle, font, 20, 50.0f, 500.0f,
 		sf::Color::Yellow, sf::Color::Blue, "Time to Go: ");
-	TextPrint(textScoreTitle, font, 20.0f, 350.0f, 500.0f,
+	TextPrint(textScoreTitle, font, 20, 350.0f, 500.0f,
 		sf::Color::Yellow, sf::Color::Blue, "GAME Score: ");
-	TextPrint(textElapsedTime, font, 20.0f, 190.0f, 500.0f,
+	TextPrint(textElapsedTime, font, 20, 190.0f, 500.0f,
 		sf::Color::Yellow, sf::Color::Blue, std::to_string(elapsedTime * 100));
-	TextPrint(textScore, font, 20.0f, 500.0f, 500.0f,
+	TextPrint(textScore, font, 20, 500.0f, 500.0f,
 		sf::Color::Yellow, sf::Color::Blue, std::to_string(gameScore));
 
 	SpawnEnemy(dt);
