@@ -38,8 +38,8 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			gun.fireBullet();
 
+		gun.update(npcs);
 		npcs.update();
-		gun.update();
 
 		window.clear();
 		npcs.draw(window);

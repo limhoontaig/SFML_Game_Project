@@ -11,6 +11,10 @@ NPC::NPC(float _x, float _y, float _speed, sf::Color _color)
 
 void NPC::update()
 {
+	if (destroyed == true)
+	{
+		return;
+	}
 	sf::Vector2f pos = rectShape.getPosition();
 	//std::cout << "pos.x: " << pos.x << " pos.y: " << pos.y << std::endl;
 	setSpeed();
@@ -41,5 +45,15 @@ void NPC::update()
 
 void NPC::draw(sf::RenderWindow& _window)
 {
+	if (destroyed == true)
+	{
+		return;
+	}
 	_window.draw(rectShape);
+}
+
+sf::FloatRect NPC::GetArea()
+{
+
+	return rectShape.getGlobalBounds();
 }

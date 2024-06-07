@@ -17,7 +17,9 @@ void NPC_Set::update()
 {
 	for (auto& _e : npcs)
 	{
-		_e.update();
+		//checkHit(ect);
+		if(_e.destroyed==false)
+			_e.update();
 	}
 }
 
@@ -25,6 +27,18 @@ void NPC_Set::draw(sf::RenderWindow& _window)
 {
 	for (auto& _e : npcs)
 	{
-		_e.draw(_window);
+		if (_e.destroyed==false)
+	       _e.draw(_window);
+	}
+}
+
+void NPC_Set::checkHit(sf::FloatRect _rect)
+{
+	for (auto& _e : npcs)
+	{
+		if (_rect.intersects(_e.GetArea()) == true)
+		{
+			_e.destroyed = true;
+		}
 	}
 }

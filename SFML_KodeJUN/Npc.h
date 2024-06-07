@@ -12,7 +12,9 @@ public:
 	void setSpeed() { speed = (float)(rand()%5 +1.0f); }
 	void setColor() { color = colors[rand() % 4]; }
 	sf::Color GetColor() { return color; }
+	sf::FloatRect GetArea();
 	float GetSpeed() { return speed; }
+	bool destroyed = false;
 private:
 	float x, y;
 	float speed;

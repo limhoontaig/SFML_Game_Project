@@ -1,5 +1,6 @@
 #include "Gun.h"
 
+
 Gun::Gun()
 {
 	// player
@@ -37,7 +38,7 @@ void Gun::fireBullet()
 	}
 }
 
-void Gun::update()
+void Gun::update(NPC_Set& npcs)
 {
 	if (showBullet == true)
 	{
@@ -46,7 +47,12 @@ void Gun::update()
 		{
 			showBullet = false;
 		}
+		else
+		{
+			npcs.checkHit(bullet.getGlobalBounds());
+		}
 	}
+
 }
 
 void Gun::draw(sf::RenderWindow& _window)
