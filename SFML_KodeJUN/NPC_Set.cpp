@@ -2,11 +2,11 @@
 
 NPC_Set::NPC_Set(int num)
 {
-	int inc = 0;
 	sf::Color colors[4] = { sf::Color::Green, sf::Color::Blue, sf::Color::Magenta, sf::Color::Yellow };
 
 	for (int i = 0; i < num; i++)
 	{
+		int inc = rand()% 300;
 		NPC npc(30.0f + inc, 30.0f + inc, (i + 1) , colors[i%4]);
 		npcs.push_back(npc);
 		inc += 20.0f;

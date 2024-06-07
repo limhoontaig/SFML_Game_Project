@@ -5,7 +5,7 @@ Gun::Gun()
 	// player
 	gun = sf::CircleShape(20.0f);
 	gun.setFillColor(sf::Color::Yellow);
-	gun.setPosition(320.0f - 20.0f, 480.0f - 20.0f);
+	gun.setPosition(320.0f - 20.0f, 500.0f - 20.0f);
 
 	// Bullet
 	bool showBullet = false;
@@ -15,33 +15,46 @@ Gun::Gun()
 
 void Gun::moveRight()
 {
-	{
-		gun.move(+1.0f, 0.0f);
-		if (gun.getPosition().x > 500)
-			gun.setPosition(sf::Vector2f{ 500.0f, 450.0f });
-	}
-	
+	gun.move(+1.0f, 0.0f);
+	if (gun.getPosition().x > 600.0f)
+		gun.setPosition(sf::Vector2f{ 600.0f, 480.0f });
 }
 
 void Gun::moveLeft()
 {
-	
+	gun.move(-1.0f, 0.0f);
+	if (gun.getPosition().x < 0)
+		gun.setPosition(sf::Vector2f{ 0.0f, 480.0f });
+}
+
+void Gun::fireBullet()
+{
+	if (showBullet == false)
 	{
-		gun.move(-1.0f, 0.0f);
-		if (gun.getPosition().x < 0)
-			gun.setPosition(sf::Vector2f{ 0.0f, 450.0f });
+		bullet.setPosition(gun.getPosition().x + 15, gun.getPosition().y);
+		//bullet.move(0.0f, -1.0f);
+		showBullet = true;
 	}
 }
 
-void Gun::bulletSpawn()
+void Gun::update()
 {
+	if (showBullet == true)
 	{
-		if (showBullet == false)
+		bullet.move(0.0f, -8.0f);
+		if (bullet.getPosition().y < 0.0f)
 		{
-			bullet.setPosition(gun.getPosition().x + 20, gun.getPosition().y);
-			bullet.move(+1.0f, 0.0f);
-			showBullet = true;
+			showBullet = false;
 		}
+	}
+}
+
+void Gun::draw(sf::RenderWindow& _window)
+{
+	_window.draw(gun);
+	if (showBullet == true)
+	{
+		_window.draw(bullet);
 	}
 }
 
