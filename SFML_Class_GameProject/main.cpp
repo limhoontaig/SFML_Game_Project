@@ -61,6 +61,7 @@ int main()
 				break;
 			case sf::Event::Closed:
 				window.close();
+				break;
 			}
 		}
 		window.clear();
@@ -68,5 +69,6 @@ int main()
 		menu.Draw(window);
 		window.display();
 	}
+
 	return 0;
 }
