@@ -20,7 +20,14 @@ public:
 	sf::Texture& GetShipTexture() { return shipTexture; }
 	sf::Texture& GetProjectileTexture() { return projettileTexture; }
 	sf::Vector2i GetScreenSize() { return screenSize; }
+	float GetElapsedTime() { return elapsedTime; }
+	int GetGameScore() { return gameScore; }
 	sf::Font& GetFont() { return font; }
+
+public:
+	float elapsedTime;
+	int gameScore;
+
 
 private:
 	void InitializeGame(); // 霸烙 郴何 按眉 积己
@@ -43,10 +50,8 @@ private:
 	sf::Texture projettileTexture;
 
 	sf::Font font;
+	
 	sf::Text text1, text2, text3, textScoreTitle, textScore, textElapsedTimeTitle, textElapsedTime;
-
-	float elapsedTime;
-	int gameScore;
 	
 	float enemyFirePeriod;
 	float enemyFireTimer;

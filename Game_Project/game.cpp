@@ -5,7 +5,7 @@
 #include "textDisplay.h"
 #include <iostream>
 
-//class Player;
+class TextDisplay;
 
 Game::Game()
 	:player{ nullptr }, bulletFirePeriod{ 0.0 }, bulletFireTimer{ 0.0 }, enemyFirePeriod{ 0.0 }, enemyFireTimer{0.0}
@@ -94,6 +94,12 @@ void Game::UpdateGame()
 	if (player->GetIsActive() == true)
 		elapsedTime += time * 1000;
 
+	//TextDisplay::TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
+		//sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
+	//TextDisplay::draw(window);
+
+
+
 	TextPrint(text2, font, 30.0f, 50.0f, 50.0f,
 		sf::Color::Red, sf::Color::Cyan, "Welcome to a Galaxy Shooter Game.");
 	TextPrint(text1, font, 56.0f, 50.0f, 100.0f,
@@ -141,7 +147,7 @@ void Game::SpawnEnemy(float dt)
 		sf::Vector2f enemyInitPosition = sf::Vector2f{ (float)(rand() % screenWidth),
 			(float)(rand() % screenHeight) };
 		actors.emplace_back(new Enemy{ this, ActorType::ENEMY,
-			enemyInitPosition, 3.0f, 100.0f });
+			enemyInitPosition, (float)(rand()%3) + 2.0f, (float)(rand()%40) + 80.0f });
 	}
 }
 
@@ -197,17 +203,16 @@ void Game::DrawGame()
 {
 	window.clear();
 	{
-		if (elapsedTime < 1.5 && elapsedTime > 0)
+		if (GetElapsedTime() < 1.5 && GetElapsedTime() > 0)
 			window.draw(text2);
-		if (elapsedTime < 1.5 && elapsedTime > 0.5f)
+		if (GetElapsedTime() < 1.5 && GetElapsedTime() > 0.5f)
 			window.draw(text1);
-		if (elapsedTime < 1.5 && elapsedTime > 1.0f)
+		if (GetElapsedTime() < 1.5 && GetElapsedTime() > 1.0f)
 			window.draw(text3);
 		window.draw(textElapsedTimeTitle);
 		window.draw(textElapsedTime);
 		window.draw(textScoreTitle);
 		window.draw(textScore);
-		
 		if (elapsedTime > 1.5)
 		{
 			for (int i = 0; i < actors.size(); i++)

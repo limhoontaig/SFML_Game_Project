@@ -72,7 +72,7 @@ void Game::InitializeGame()
 	enemyFireTimer = enemyFirePeriod;
 
 	// Weapon (Bullet 신규 생성)
-	bulletFirePeriod = 0.1f;
+	bulletFirePeriod = 0.5f;
 	bulletFireTimer = bulletFirePeriod;
 }
 
