@@ -1,7 +1,35 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 #define CIRCLE_RADIUS 100.0f
+void play_sound_detail(const std::string& filename)
+{
+	sf::SoundBuffer buffer;
+
+	if (!buffer.loadFromFile(filename))
+	{
+		std::cout << "LoadFromFile Error !!" << std::endl;
+		return;
+	}
+
+	std::cout << filename << "을 재생중: " << std::endl;
+	std::cout << " " << buffer.getDuration().asSeconds() << " sec" << std::endl;
+	std::cout << " " << buffer.getSampleRate() << " samples / sec" << std::endl;
+	std::cout << " " << buffer.getChannelCount() << " channel" << std::endl;
+
+	sf::Sound sound(buffer);
+	sound.play();
+
+	while (sound.getStatus() == sf::Sound::Playing)
+	{
+		sf::sleep(sf::milliseconds(100));
+		std::cout << "\r제생 중...." << sound.getPlayingOffset().asSeconds() << std::endl;
+		std::cout << std::flush;
+	}
+	std::cout << std::endl << std::endl;	
+}
+
 
 int textPrint(sf::Text& textMsg, sf::Font& font, int size, float x, float y,
 	const sf::Color& color, const sf::Color& outColor, sf::String p)
@@ -38,6 +66,17 @@ int main()
 	sf::Clock ai_Timer;
 	float interval = 0, delay1 = 8.0f;
 	int count = 0;
+
+	sf::SoundBuffer buffer;
+
+	if (!buffer.loadFromFile("../resources/concentration.wav"))
+	{
+		std::cout << "LoadFromFile Error !!" << std::endl;
+		return -1;
+	}
+
+	sf::Sound sound(buffer);
+
 
 	const sf::Time ai_time = sf::seconds(0.5f);
 
@@ -160,7 +199,7 @@ int main()
 			interval = 0;
 			count++;
 		}
-		/*
+		
 		if (((int)interval % 2) == 0)
 		{
 			window.clear(sf::Color::Black);
@@ -173,7 +212,7 @@ int main()
 
 			window.draw(rectangle);
 			window.draw(sprite_on);
-			if (x > 200) { x = 0, y = 0; }
+			if (x > 800) { x = 0, y = 0; }
 
 		}
 		else
@@ -181,11 +220,18 @@ int main()
 			window.clear(sf::Color::Black);
 			window.draw(sprite_off);
 		}
-		*/
+		
+		if (((int)interval % 5) == 0)
+		{
+			std::cout << "interval = " << interval << std::endl;
+			play_sound_detail("../resources/Lightening.wav");
 
+			std::cout << "resources/Concentration.wav 재생" << std::endl;
+			sound.play();
+		}
 
-		window.clear(sf::Color::White);
-		circle_shape.setPosition(sf::Vector2f{ x - 100.0f, y - 100.0f });
+		//window.clear(sf::Color::White);
+		circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
 		window.draw(circle_shape);
 		window.display();
 	}
