@@ -3,6 +3,9 @@
 #include <iostream>
 
 #define CIRCLE_RADIUS 100.0f
+#define MOVE_PIXEL 5.0f
+#define MAX_ENEMY_COUNT 20
+
 void play_sound_detail(const std::string& filename)
 {
 	sf::SoundBuffer buffer;
@@ -46,6 +49,12 @@ int textPrint(sf::Text& textMsg, sf::Font& font, int size, float x, float y,
 	return 0;
 }
 
+float rand_number(int max)
+{
+	float num = (float)(rand() % max + 1);
+	return num;
+}
+
 int main()
 {
 	// Text 
@@ -53,6 +62,8 @@ int main()
 	sf::Text text1, text2, text3;
 	sf::Uint8 r = 0, g = 0, b = 0;
 	sf::String msgStr = "Ready Go! Maincodes !!";
+
+
 
 	float x = 0, y = 0;
 	
@@ -72,6 +83,10 @@ int main()
 	sf::Clock clock;
 	sf::Clock ai_Timer;
 	float interval = 0, delay1 = 8.0f;
+	float rectx_p = 0, recty_p = 0;
+	float rextx_n = 50, recty_n = 50;
+	srand((unsigned int)time(NULL));
+
 	float timer = 0;
 	int count = 0;
 
@@ -125,6 +140,27 @@ int main()
 	text1.setPosition(text1.getOrigin());
 
 	sf::RectangleShape rect_shape(sf::Vector2f{ 200.0f, 200.0f });
+	sf::RectangleShape rect_player;
+	std::vector<sf::CircleShape> enemies;
+	sf::CircleShape enemy_circle;
+
+	rect_player.setSize(sf::Vector2f{ 15.0f, 15.0f });
+	rect_player.setOutlineColor(sf::Color::Green);
+	rect_player.setOutlineThickness(2.0f);
+	rect_player.setPosition(sf::Vector2f{ 150.0f, 400.0f });
+
+	for (int i = 0; i < MAX_ENEMY_COUNT; i++)
+	{
+		enemy_circle.setRadius(rand_number(25));
+		enemy_circle.setOutlineColor(sf::Color::Red);
+		enemy_circle.setOutlineThickness(5.0f);
+		enemy_circle.setPosition(rand_number(500), recty_n);
+		sf::Vector2f rpos = enemy_circle.getPosition();
+		enemies.push_back(enemy_circle);
+	}
+
+
+
 
 	sf::RectangleShape small_rect_shape;
 
@@ -193,7 +229,17 @@ int main()
 					break;
 				}
 				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+					rect_player.move(-MOVE_PIXEL, 0);
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+					rect_player.move(+MOVE_PIXEL, 0);
 				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+					rect_player.move(0, -MOVE_PIXEL);
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+					rect_player.move(0, +MOVE_PIXEL);
 				
 				/*
 				if (event.key.code == sf::Keyboard::Space)
@@ -327,7 +373,26 @@ int main()
 		}
 		*/
 		//배경화면을 흰색으로 clear
-		window.clear(sf::Color::White);
+		window.clear(sf::Color::Black);
+		if ((int)interval % 1 == 0)
+		{
+			std::vector<sf::CircleShape>::iterator iter;
+			for (iter = enemies.begin(); iter != enemies.end(); iter++)
+			{
+				(*iter).move(0, rand_number(3));
+				sf::Vector2f pos = (*iter).getPosition();
+				if (pos.y > 500)
+					(*iter).setPosition(rand_number(400), recty_n);
+			}
+		}
+
+		std::vector<sf::CircleShape>::iterator iter;
+		for (int i = 0; i < enemies.size(); i++)
+		{
+			if ((enemies[i].getGlobalBounds))
+		}
+
+
 
 		//rect_shape 위치 보정
 		rect_shape.setPosition(sf::Vector2f( (float)x + 100.0f, y + 100.f));
