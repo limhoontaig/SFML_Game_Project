@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
 
@@ -13,7 +13,7 @@ void play_sound_detail(const std::string& filename)
 		return;
 	}
 
-	std::cout << filename << "�� �����: " << std::endl;
+	std::cout << filename << "을 재생중: " << std::endl;
 	std::cout << " " << buffer.getDuration().asSeconds() << " sec" << std::endl;
 	std::cout << " " << buffer.getSampleRate() << " samples / sec" << std::endl;
 	std::cout << " " << buffer.getChannelCount() << " channel" << std::endl;
@@ -25,7 +25,7 @@ void play_sound_detail(const std::string& filename)
 	while (sound.getStatus() == sf::Sound::Playing)
 	{
 		sf::sleep(sf::milliseconds(100));
-		std::cout << "\r���� ��...." << sound.getPlayingOffset().asSeconds() << std::endl;
+		std::cout << "\r제생 중...." << sound.getPlayingOffset().asSeconds() << std::endl;
 		std::cout << std::flush;
 	}
 	std::cout << std::endl << std::endl;	
@@ -72,6 +72,7 @@ int main()
 	sf::Clock clock;
 	sf::Clock ai_Timer;
 	float interval = 0, delay1 = 8.0f;
+	float timer = 0;
 	int count = 0;
 
 	// sound
@@ -88,7 +89,7 @@ int main()
 	// timer variables
 	const sf::Time ai_time = sf::seconds(0.5f);
 
-	std::cout << "���α׷��� ���۵Ǿ����ϴ�. " << std::endl;
+	std::cout << "프로그램이 시작되었습니다. " << std::endl;
 
 	// texture and sprite
 	sf::Texture color_off, color_on;
@@ -122,6 +123,27 @@ int main()
 	textPrint(text2, font, 80, 150, 100, sf::Color::White, sf::Color::White, msgStr);
 	textPrint(text3, font, 100, 150, 210, sf::Color::Blue, sf::Color::White, msgStr);
 
+	text1.setOrigin(200.0f, 200.0f);
+	text1.setPosition(text1.getOrigin());
+
+	sf::RectangleShape rect_shape(sf::Vector2f{ 200.0f, 200.0f });
+
+	sf::RectangleShape small_rect_shape[5];
+
+	rect_shape.setFillColor(sf::Color::Green);
+	rect_shape.setOutlineColor(sf::Color::Red);
+	rect_shape.setOutlineThickness(20.0f);
+	rect_shape.setPosition(x, y);
+
+	for (int i = 0; i < 5; i++)
+	{
+		small_rect_shape[i].setSize(sf::Vector2f{10.0f, 10.0f});
+		small_rect_shape[i].setFillColor(sf::Color::Yellow);
+		small_rect_shape[i].setOutlineColor(sf::Color::Blue);
+		small_rect_shape[i].setOutlineThickness(20.0f);
+		small_rect_shape[i].setPosition(x+((i+1)*100), y);
+	}
+
 
 	while (window.isOpen())
 	{
@@ -139,9 +161,29 @@ int main()
 			if (event.type == sf::Event::EventType::Closed)
 			{
 				window.close();
-				std::cout << "���α׷��� ����Ǿ����ϴ�." << std::endl;
+				std::cout << "프로그램이 종료되었습니다." << std::endl;
 			}
 		}
+
+		// key pressed
+		if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::Space)
+			{
+				float speed = 3.0f;
+				for (int i = 0; i < 50; i += speed)
+				{
+					small_rect_shape[0].move(speed * 1, speed*1);
+					window.draw(small_rect_shape[0]);
+					window.display();
+				}
+				small_rect_shape[0].setPosition(sf::Vector2f{ (float)x, (float)y });
+				break;
+			}
+
+		}
+
+
 
 		// mouse press event process
 		if (event.type == sf::Event::MouseButtonPressed)
@@ -152,7 +194,7 @@ int main()
 			{
 				circle_shape.setFillColor(sf::Color::Yellow);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				std::cout << "���ʹ�ư ���� : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+				std::cout << "왼쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			case sf::Mouse::Right:
@@ -162,7 +204,7 @@ int main()
 				float x_f = (float)pos.x + CIRCLE_RADIUS;
 				float y_f = (float)pos.y + CIRCLE_RADIUS;
 				circle_shape.setPosition(sf::Vector2f{ x_f, y_f });
-				std::cout << "�����ʹ�ư ���� : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+				std::cout << "오른쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			}
@@ -180,21 +222,21 @@ int main()
 				float x_f = (float)pos.x - CIRCLE_RADIUS;
 				float y_f = (float)pos.y - CIRCLE_RADIUS;
 				circle_shape.setPosition(sf::Vector2f{x_f, y_f});
-				std::cout << "���ʹ�ư �� : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+				std::cout << "왼쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			case sf::Mouse::Right:
 			{
 				circle_shape.setFillColor(sf::Color::Green);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				std::cout << "�����ʹ�ư �� : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+				std::cout << "오른쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			case sf::Mouse::Middle:
 			{
 				circle_shape.setFillColor(sf::Color::Green);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				std::cout << "�߰���ư �� : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+				std::cout << "중간버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			}
@@ -248,6 +290,59 @@ int main()
 			std::cout << "resources/music/BabyElephantWalk60.wav" << std::endl;
 			sound.play();
 		}
+
+		//배경화면을 흰색으로 clear
+		window.clear(sf::Color::White);
+
+		//rect_shape 위치 보정
+		rect_shape.setPosition(sf::Vector2f( (float)x - 100.0f, y - 100.f));
+		window.draw(rect_shape);
+
+
+		//텍스트 이동
+		text1.move(1.f, 1.f);
+
+		//글자 위치 재설정
+		if (text1.getPosition().x == 1000 || text1.getPosition().y == 1000)
+			text1.setPosition(10, 10);
+
+		//타이머에 맞춰 글자 크기를 확대
+		text1.setScale(timer * 1.5f, timer * 1.2f);
+
+		//글자 크기 재설정
+		if (text1.getScale().x == 100 || text1.getScale().y == 100)
+			text1.setScale(1.0f, 1.0f);
+
+
+		//글자 로테이션 설정
+		text1.setRotation(timer * 100);
+		window.draw(text1);
+
+
+		//작은 사각형 이동
+		for (int i = 0; i < 5; i++)
+		{
+			small_rect_shape[i].move(0, 5.f);
+
+			if (small_rect_shape[i].getPosition().y == 1000)
+				small_rect_shape[i].setPosition(x + ((i + 1) * 100), y);
+
+			window.draw(small_rect_shape[i]);
+		}
+
+		//큰 사각형 로테이션
+		rect_shape.setRotation(timer * 150);
+		window.draw(rect_shape);
+
+
+		//약 5초 후에는 타이머 재설정
+		if (timer > 5)
+			timer = 0;
+		std::cout << "timerRotate = " << timer << std::endl;
+
+		//프레임을 스크린에 출력
+		window.display();
+	
 
 		//window.clear(sf::Color::White);
 		//circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
