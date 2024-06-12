@@ -119,8 +119,8 @@ int main()
 	}
 
 	textPrint(text1, font, 30, 0, 0, sf::Color::Yellow, sf::Color::White, msgStr);
-	textPrint(text2, font, 100, 0, 0, sf::Color::White, sf::Color::White, msgStr);
-	textPrint(text3, font, 150, 0, 110, sf::Color::Blue, sf::Color::White, msgStr);
+	textPrint(text2, font, 80, 150, 100, sf::Color::White, sf::Color::White, msgStr);
+	textPrint(text3, font, 100, 150, 210, sf::Color::Blue, sf::Color::White, msgStr);
 
 
 	while (window.isOpen())
