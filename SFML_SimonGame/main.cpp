@@ -350,7 +350,7 @@ int main()
 
 
 		//글자 로테이션 설정
-		text3.setRotation(timer * 5);
+		text3.setRotation(timer * 100);
 		window.draw(text3);
 
 		/*
@@ -390,7 +390,7 @@ int main()
 
 		//window.clear(sf::Color::White);
 		//circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
-		window.draw(circle_shape);
+		//window.draw(circle_shape);
 		window.display();
 	}
 	return 0;
