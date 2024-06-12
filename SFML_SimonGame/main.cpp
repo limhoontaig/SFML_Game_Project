@@ -110,7 +110,7 @@ int main()
 
 
 	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML Works");
-	window.setFramerateLimit(120);
+	window.setFramerateLimit(30);
 
 	// font load
 	sf::Font font;
@@ -151,6 +151,7 @@ int main()
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
 		interval += time;
+		timer += time;
 		
 		// event processor
 		sf::Event event;
@@ -194,6 +195,7 @@ int main()
 			{
 				circle_shape.setFillColor(sf::Color::Yellow);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
+				rect_shape.setOrigin(sf::Vector2f{ (float)pos.x, (float)pos.y});
 				std::cout << "왼쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
@@ -241,7 +243,7 @@ int main()
 			}
 			}
 		}
-
+		/*
 
 		// ai_time period action (current 0.5sec)
 		if (ai_Timer.getElapsedTime() > ai_time)
@@ -290,12 +292,12 @@ int main()
 			std::cout << "resources/music/BabyElephantWalk60.wav" << std::endl;
 			sound.play();
 		}
-
+		*/
 		//배경화면을 흰색으로 clear
 		window.clear(sf::Color::White);
 
 		//rect_shape 위치 보정
-		rect_shape.setPosition(sf::Vector2f( (float)x - 100.0f, y - 100.f));
+		rect_shape.setPosition(sf::Vector2f( (float)x + 100.0f, y + 100.f));
 		window.draw(rect_shape);
 
 
@@ -315,8 +317,8 @@ int main()
 
 
 		//글자 로테이션 설정
-		text1.setRotation(timer * 100);
-		window.draw(text1);
+		text3.setRotation(timer * 5);
+		window.draw(text3);
 
 
 		//작은 사각형 이동
@@ -331,17 +333,26 @@ int main()
 		}
 
 		//큰 사각형 로테이션
-		rect_shape.setRotation(timer * 150);
-		window.draw(rect_shape);
+		/*
+		for (int i = 0; i < 20; i++)
+		{
+			window.draw(rect_shape);
+			//rect_shape.setRotation(timer * 1.5f);
+			//window.draw(rect_shape);
+
+		}
+		*/
+		rect_shape.setRotation(timer * 15.0f);
+		rect_shape.setPosition({ (float)(rand() % 200), (float)(rand() % 200) });
 
 
 		//약 5초 후에는 타이머 재설정
-		if (timer > 5)
+		if (timer > 15)
 			timer = 0;
 		std::cout << "timerRotate = " << timer << std::endl;
 
 		//프레임을 스크린에 출력
-		window.display();
+		//window.display();
 	
 
 		//window.clear(sf::Color::White);
