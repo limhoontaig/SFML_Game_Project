@@ -21,6 +21,7 @@ void play_sound_detail(const std::string& filename)
 	sf::Sound sound(buffer);
 	sound.play();
 
+	/*
 	while (sound.getStatus() == sf::Sound::Playing)
 	{
 		sf::sleep(sf::milliseconds(100));
@@ -28,6 +29,7 @@ void play_sound_detail(const std::string& filename)
 		std::cout << std::flush;
 	}
 	std::cout << std::endl << std::endl;	
+	*/
 }
 
 
@@ -46,12 +48,15 @@ int textPrint(sf::Text& textMsg, sf::Font& font, int size, float x, float y,
 
 int main()
 {
+	// Text 
+	
 	sf::Text text1, text2, text3;
 	sf::Uint8 r = 0, g = 0, b = 0;
 	sf::String msgStr = "Ready Go! Maincodes !!";
 
 	int x = 0, y = 0;
 	
+	// Circle Shape oblect
 	sf::CircleShape circle_shape(CIRCLE_RADIUS);
 	circle_shape.setFillColor(sf::Color::Green);
 	circle_shape.setRadius(CIRCLE_RADIUS);
@@ -59,17 +64,20 @@ int main()
 	circle_shape.setOutlineThickness(20.0f);
 	circle_shape.setPosition(x, y);
 
+	// rectangle shape object
 	sf::RectangleShape rectangle(sf::Vector2f{ 200.0f, 200.0f });
 	rectangle.setFillColor(sf::Color::Blue);
 
+	// clock 
 	sf::Clock clock;
 	sf::Clock ai_Timer;
 	float interval = 0, delay1 = 8.0f;
 	int count = 0;
 
+	// sound
 	sf::SoundBuffer buffer;
 
-	if (!buffer.loadFromFile("../resources/concentration.wav"))
+	if (!buffer.loadFromFile("../resources/music/CantinaBand60.wav"))
 	{
 		std::cout << "LoadFromFile Error !!" << std::endl;
 		return -1;
@@ -77,16 +85,16 @@ int main()
 
 	sf::Sound sound(buffer);
 
-
+	// timer variables
 	const sf::Time ai_time = sf::seconds(0.5f);
 
 	std::cout << "프로그램이 시작되었습니다. " << std::endl;
 
+	// texture and sprite
 	sf::Texture color_off, color_on;
 	sf::Sprite sprite_on, sprite_off;
 
 	color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png");
-	//color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png");
 	color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png");
 
 	sprite_on.setTexture(color_on);
@@ -102,6 +110,8 @@ int main()
 
 	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML Works");
 	window.setFramerateLimit(120);
+
+	// font load
 	sf::Font font;
 	if (!font.loadFromFile("../resources/font/DS-DIGIB.TTF"))
 	{
@@ -113,17 +123,17 @@ int main()
 	textPrint(text3, font, 150, 0, 110, sf::Color::Blue, sf::Color::White, msgStr);
 
 
-
-
-
 	while (window.isOpen())
 	{
+		// cycling time and elapsed time 
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
 		interval += time;
 		
+		// event processor
 		sf::Event event;
 
+		// window close event process
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::EventType::Closed)
@@ -133,6 +143,7 @@ int main()
 			}
 		}
 
+		// mouse press event process
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
 			switch (event.key.code)
@@ -148,12 +159,16 @@ int main()
 			{
 				circle_shape.setFillColor(sf::Color::Magenta);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
+				float x_f = (float)pos.x + CIRCLE_RADIUS;
+				float y_f = (float)pos.y + CIRCLE_RADIUS;
+				circle_shape.setPosition(sf::Vector2f{ x_f, y_f });
 				std::cout << "오른쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
 			}
 		}
 
+		// mouse release event
 		if (event.type == sf::Event::MouseButtonReleased)
 		{
 			switch (event.key.code)
@@ -162,6 +177,9 @@ int main()
 			{
 				circle_shape.setFillColor(sf::Color::Green);
 				sf::Vector2i pos = sf::Mouse::getPosition(window);
+				float x_f = (float)pos.x - CIRCLE_RADIUS;
+				float y_f = (float)pos.y - CIRCLE_RADIUS;
+				circle_shape.setPosition(sf::Vector2f{x_f, y_f});
 				std::cout << "왼쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
 				break;
 			}
@@ -183,14 +201,14 @@ int main()
 		}
 
 
-
-
+		// ai_time period action (current 0.5sec)
 		if (ai_Timer.getElapsedTime() > ai_time)
 		{
 			ai_Timer.restart();
 			std::cout << "ai_Timer..." << interval << std::endl;
 		}
 
+		// delay1 time period action (current 4sec)
 		if (interval > delay1 )
 		{
 			ai_Timer.restart();
@@ -200,6 +218,8 @@ int main()
 			count++;
 		}
 		
+
+		// interval 
 		if (((int)interval % 2) == 0)
 		{
 			window.clear(sf::Color::Black);
@@ -210,10 +230,9 @@ int main()
 			window.draw(text2);
 			window.draw(text3);
 
-			window.draw(rectangle);
-			window.draw(sprite_on);
+			// window.draw(rectangle);
+			// window.draw(sprite_on);
 			if (x > 800) { x = 0, y = 0; }
-
 		}
 		else
 		{
@@ -224,14 +243,14 @@ int main()
 		if (((int)interval % 5) == 0)
 		{
 			std::cout << "interval = " << interval << std::endl;
-			play_sound_detail("../resources/Lightening.wav");
+			play_sound_detail("../resources/music/BabyElephantWalk60.wav");
 
-			std::cout << "resources/Concentration.wav 재생" << std::endl;
+			std::cout << "resources/music/BabyElephantWalk60.wav" << std::endl;
 			sound.play();
 		}
 
 		//window.clear(sf::Color::White);
-		circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
+		//circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
 		window.draw(circle_shape);
 		window.display();
 	}
