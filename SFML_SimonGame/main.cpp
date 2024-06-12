@@ -54,7 +54,7 @@ int main()
 	sf::Uint8 r = 0, g = 0, b = 0;
 	sf::String msgStr = "Ready Go! Maincodes !!";
 
-	int x = 0, y = 0;
+	float x = 0, y = 0;
 	
 	// Circle Shape oblect
 	sf::CircleShape circle_shape(CIRCLE_RADIUS);
@@ -65,8 +65,8 @@ int main()
 	circle_shape.setPosition(x, y);
 
 	// rectangle shape object
-	sf::RectangleShape rectangle(sf::Vector2f{ 200.0f, 200.0f });
-	rectangle.setFillColor(sf::Color::Blue);
+	//sf::RectangleShape rectangle(sf::Vector2f{ 200.0f, 200.0f });
+	//rectangle.setFillColor(sf::Color::Blue);
 
 	// clock 
 	sf::Clock clock;
@@ -109,8 +109,6 @@ int main()
 
 
 
-	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML Works");
-	window.setFramerateLimit(30);
 
 	// font load
 	sf::Font font;
@@ -123,26 +121,30 @@ int main()
 	textPrint(text2, font, 80, 150, 100, sf::Color::White, sf::Color::White, msgStr);
 	textPrint(text3, font, 100, 150, 210, sf::Color::Blue, sf::Color::White, msgStr);
 
-	text1.setOrigin(200.0f, 200.0f);
+	text1.setOrigin(400.0f, 400.0f);
 	text1.setPosition(text1.getOrigin());
 
 	sf::RectangleShape rect_shape(sf::Vector2f{ 200.0f, 200.0f });
 
-	sf::RectangleShape small_rect_shape[5];
+	sf::RectangleShape small_rect_shape;
 
 	rect_shape.setFillColor(sf::Color::Green);
 	rect_shape.setOutlineColor(sf::Color::Red);
 	rect_shape.setOutlineThickness(20.0f);
 	rect_shape.setPosition(x, y);
 
+	small_rect_shape.setSize(sf::Vector2f{10.0f, 10.0f});
+	small_rect_shape.setFillColor(sf::Color::Yellow);
+	small_rect_shape.setOutlineColor(sf::Color::Blue);
+	small_rect_shape.setOutlineThickness(20.0f);
+	small_rect_shape.setPosition(x, y);
 	for (int i = 0; i < 5; i++)
 	{
-		small_rect_shape[i].setSize(sf::Vector2f{10.0f, 10.0f});
-		small_rect_shape[i].setFillColor(sf::Color::Yellow);
-		small_rect_shape[i].setOutlineColor(sf::Color::Blue);
-		small_rect_shape[i].setOutlineThickness(20.0f);
-		small_rect_shape[i].setPosition(x+((i+1)*100), y);
 	}
+
+
+	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML Works");
+	window.setFramerateLimit(30);
 
 
 	while (window.isOpen())
@@ -164,85 +166,116 @@ int main()
 				window.close();
 				std::cout << "프로그램이 종료되었습니다." << std::endl;
 			}
-		}
 
-		// key pressed
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Space)
+			// key pressed
+			if (event.type == sf::Event::KeyPressed)
 			{
-				float speed = 3.0f;
-				for (int i = 0; i < 50; i += speed)
+				switch (event.key.code)
 				{
-					small_rect_shape[0].move(speed * 1, speed*1);
-					window.draw(small_rect_shape[0]);
-					window.display();
+				case sf::Keyboard::Left:
+				{
+					x -= 10;
+					break;
 				}
-				small_rect_shape[0].setPosition(sf::Vector2f{ (float)x, (float)y });
-				break;
+				case sf::Keyboard::Right:
+				{
+					x += 10;
+					break;
+				}
+				case sf::Keyboard::Up:
+				{
+					y -= 10;
+					break;
+				}
+				case sf::Keyboard::Down:
+				{
+					y += 10;
+					break;
+				}
+				}
+				
+				
+				/*
+				if (event.key.code == sf::Keyboard::Space)
+				{
+					float speed = 3.0f;
+					for (int i = 0; i < 50; i += speed)
+					{
+						small_rect_shape[0].move(speed * 1, speed*1);
+						window.draw(small_rect_shape[0]);
+						window.display();
+					}
+					small_rect_shape[0].setPosition(sf::Vector2f{ (float)x, (float)y });
+					break;
+				}
+				*/
+				
 			}
 
+
+
+			// mouse press event process
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				switch (event.key.code)
+				{
+				case sf::Mouse::Left:
+				{
+					circle_shape.setFillColor(sf::Color::Yellow);
+					sf::Vector2i pos = sf::Mouse::getPosition(window);
+					rect_shape.setOrigin(sf::Vector2f{ (float)pos.x, (float)pos.y});
+					std::cout << "왼쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+					break;
+				}
+				case sf::Mouse::Right:
+				{
+					circle_shape.setFillColor(sf::Color::Magenta);
+					sf::Vector2i pos = sf::Mouse::getPosition(window);
+					float x_f = (float)pos.x + CIRCLE_RADIUS;
+					float y_f = (float)pos.y + CIRCLE_RADIUS;
+					circle_shape.setPosition(sf::Vector2f{ x_f, y_f });
+					std::cout << "오른쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+					break;
+				}
+				}
+			}
+
+			// mouse release event
+			if (event.type == sf::Event::MouseButtonReleased)
+			{
+				switch (event.key.code)
+				{
+				case sf::Mouse::Left:
+				{
+					circle_shape.setFillColor(sf::Color::Green);
+					sf::Vector2i pos = sf::Mouse::getPosition(window);
+					float x_f = (float)pos.x - CIRCLE_RADIUS;
+					float y_f = (float)pos.y - CIRCLE_RADIUS;
+					circle_shape.setPosition(sf::Vector2f{x_f, y_f});
+					std::cout << "왼쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+					break;
+				}
+				case sf::Mouse::Right:
+				{
+					circle_shape.setFillColor(sf::Color::Green);
+					sf::Vector2i pos = sf::Mouse::getPosition(window);
+					std::cout << "오른쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+					break;
+				}
+				case sf::Mouse::Middle:
+				{
+					circle_shape.setFillColor(sf::Color::Green);
+					sf::Vector2i pos = sf::Mouse::getPosition(window);
+					std::cout << "중간버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
+					break;
+				}
+				}
+			}
 		}
 
 
 
-		// mouse press event process
-		if (event.type == sf::Event::MouseButtonPressed)
-		{
-			switch (event.key.code)
-			{
-			case sf::Mouse::Left:
-			{
-				circle_shape.setFillColor(sf::Color::Yellow);
-				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				rect_shape.setOrigin(sf::Vector2f{ (float)pos.x, (float)pos.y});
-				std::cout << "왼쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-				break;
-			}
-			case sf::Mouse::Right:
-			{
-				circle_shape.setFillColor(sf::Color::Magenta);
-				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				float x_f = (float)pos.x + CIRCLE_RADIUS;
-				float y_f = (float)pos.y + CIRCLE_RADIUS;
-				circle_shape.setPosition(sf::Vector2f{ x_f, y_f });
-				std::cout << "오른쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-				break;
-			}
-			}
-		}
 
-		// mouse release event
-		if (event.type == sf::Event::MouseButtonReleased)
-		{
-			switch (event.key.code)
-			{
-			case sf::Mouse::Left:
-			{
-				circle_shape.setFillColor(sf::Color::Green);
-				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				float x_f = (float)pos.x - CIRCLE_RADIUS;
-				float y_f = (float)pos.y - CIRCLE_RADIUS;
-				circle_shape.setPosition(sf::Vector2f{x_f, y_f});
-				std::cout << "왼쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-				break;
-			}
-			case sf::Mouse::Right:
-			{
-				circle_shape.setFillColor(sf::Color::Green);
-				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				std::cout << "오른쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-				break;
-			}
-			case sf::Mouse::Middle:
-			{
-				circle_shape.setFillColor(sf::Color::Green);
-				sf::Vector2i pos = sf::Mouse::getPosition(window);
-				std::cout << "중간버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-				break;
-			}
-			}
-		}
 		/*
 
 		// ai_time period action (current 0.5sec)
@@ -320,7 +353,7 @@ int main()
 		text3.setRotation(timer * 5);
 		window.draw(text3);
 
-
+		/*
 		//작은 사각형 이동
 		for (int i = 0; i < 5; i++)
 		{
@@ -331,7 +364,7 @@ int main()
 
 			window.draw(small_rect_shape[i]);
 		}
-
+		*/
 		//큰 사각형 로테이션
 		/*
 		for (int i = 0; i < 20; i++)
