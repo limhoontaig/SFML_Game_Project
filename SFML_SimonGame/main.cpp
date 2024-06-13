@@ -1,477 +1,280 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <iostream>
+#include <time.h>
 
-#define CIRCLE_RADIUS 100.0f
-#define MOVE_PIXEL 5.0f
-#define MAX_ENEMY_COUNT 20
+using namespace std;
+using namespace sf;
 
-void play_sound_detail(const std::string& filename)
+#define KEYPAD_START_X 0
+#define KEYPAD_START_Y 0
+#define TEXT_MSG_X 180.f
+#define TEXT_MSG_Y 200.f
+#define KEYPAD_BTN_WIDTH 252
+#define KEYPAD_BTN_HEIGHT 252
+
+string com_numbers = "";
+int level = 1;
+
+//Generate random number
+int generate_random_number()
 {
-	sf::SoundBuffer buffer;
+	com_numbers.clear();
+	srand((unsigned int)time(NULL));
+	for (int i = 0; i < level; i++)
+		com_numbers += to_string(rand() % 4);
 
-	if (!buffer.loadFromFile(filename))
-	{
-		std::cout << "LoadFromFile Error !!" << std::endl;
-		return;
-	}
+	#if 0
+		cout  << "-----------------------------------------" << endl;
+	cout  << "[ COM]Level:" << level  << " Random Number:" << comNumbers  << endl;
+	cout  << "-----------------------------------------" << endl;
+#endif
 
-	std::cout << filename << "을 재생중: " << std::endl;
-	std::cout << " " << buffer.getDuration().asSeconds() << " sec" << std::endl;
-	std::cout << " " << buffer.getSampleRate() << " samples / sec" << std::endl;
-	std::cout << " " << buffer.getChannelCount() << " channel" << std::endl;
-
-	sf::Sound sound(buffer);
-	sound.play();
-
-	/*
-	while (sound.getStatus() == sf::Sound::Playing)
-	{
-		sf::sleep(sf::milliseconds(100));
-		std::cout << "\r제생 중...." << sound.getPlayingOffset().asSeconds() << std::endl;
-		std::cout << std::flush;
-	}
-	std::cout << std::endl << std::endl;	
-	*/
+	return 0;
 }
 
-
-int textPrint(sf::Text& textMsg, sf::Font& font, int size, float x, float y,
-	const sf::Color& color, const sf::Color& outColor, sf::String p)
+// function for display text
+int print_text(Text& textMsg, Font& font, int size,
+	float x, float y, const Color& color, const Color& outColor, string p)
 {
 	textMsg.setFont(font);
 	textMsg.setCharacterSize(size);
 	textMsg.setPosition(x, y);
 	textMsg.setFillColor(color);
 	textMsg.setOutlineColor(outColor);
-	textMsg.setOutlineThickness(1.0f);
 	textMsg.setString(p);
-	return 0;
-}
 
-float rand_number(int max)
-{
-	float num = (float)(rand() % max + 1);
-	return num;
+	return 0;
 }
 
 int main()
 {
-	// Text 
-	
-	sf::Text text1, text2, text3;
-	sf::Uint8 r = 0, g = 0, b = 0;
-	sf::String msgStr = "Ready Go! Maincodes !!";
+	Texture tex_color_off, tex_color_on;
+	Sprite sprite_off[5], sprite_on[5], sprite_start_logo;
+	Font font_level, font_message;
+	Text text_level, text_message;
 
+	string input_numbers = "";
+	int levelLoop = 0;
 
+	int x = 0, y = 0, n = 0;
+	int color_grid[2][2] = { 0 };
+	int xx = 0, yy = 0;
 
-	float x = 0, y = 0;
-	
-	// Circle Shape oblect
-	sf::CircleShape circle_shape(CIRCLE_RADIUS);
-	circle_shape.setFillColor(sf::Color::Green);
-	circle_shape.setRadius(CIRCLE_RADIUS);
-	circle_shape.setOutlineColor(sf::Color::Red);
-	circle_shape.setOutlineThickness(20.0f);
-	circle_shape.setPosition(x, y);
+	Clock clock;
 
-	// rectangle shape object
-	//sf::RectangleShape rectangle(sf::Vector2f{ 200.0f, 200.0f });
-	//rectangle.setFillColor(sf::Color::Blue);
+	float number_order = 0, delay_number_order = 1.5; //inerval for show each color
+	float game_start = 0, delay_game_start = 3.0; //wait for game start
+	float ready = 0, delay_ready = 2.0; //Show "Ready, Go" message for 2 seconds
+	float rotate_time = 0;
 
-	// clock 
-	sf::Clock clock;
-	sf::Clock ai_Timer;
-	float interval = 0, delay1 = 8.0f;
-	float rectx_p = 0, recty_p = 0;
-	float rextx_n = 50, recty_n = 50;
-	srand((unsigned int)time(NULL));
+	string level_string = "Level : " + to_string(level);
+	string message_string = "Ready, Go!";
+	bool isgamestart = false;
+	int index = 0;
 
-	float timer = 0;
-	int count = 0;
+	RenderWindow app(VideoMode(504, 504), "Remember It - https://maincodes.tistory.com/");
+	app.setFramerateLimit(60);
 
-	// sound
-	sf::SoundBuffer buffer;
-
-	if (!buffer.loadFromFile("../resources/music/CantinaBand60.wav"))
+	//Load resources from files
+	if (tex_color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png") == false)
 	{
-		std::cout << "LoadFromFile Error !!" << std::endl;
-		return -1;
+		cout << "loadFromeFile err" << endl;
+		return - 1;
 	}
 
-	sf::Sound sound(buffer);
-
-	// timer variables
-	const sf::Time ai_time = sf::seconds(0.5f);
-
-	std::cout << "프로그램이 시작되었습니다. " << std::endl;
-
-	// texture and sprite
-	sf::Texture color_off, color_on;
-	sf::Sprite sprite_on, sprite_off;
-
-	color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png");
-	color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png");
-
-	sprite_on.setTexture(color_on);
-	sprite_on.setTextureRect(sf::IntRect(0, 0, 30, 30));
-	sprite_on.setPosition(sf::Vector2f{ 300.0f, 250.0f });
-	sprite_on.scale(sf::Vector2f{ 2.0f, 2.0f });
-
-	sprite_off.setTexture(color_off);
-	sprite_off.setTextureRect(sf::IntRect(0, 0, 50, 50));
-	sprite_off.setPosition(sf::Vector2f{ 100.0f, 150.0f });
-
-
-
-
-	// font load
-	sf::Font font;
-	if (!font.loadFromFile("../resources/font/DS-DIGIB.TTF"))
+	if (tex_color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png") == false)
 	{
-		return false;
-	}
-
-	textPrint(text1, font, 30, 0, 0, sf::Color::Yellow, sf::Color::White, msgStr);
-	textPrint(text2, font, 80, 150, 100, sf::Color::White, sf::Color::White, msgStr);
-	textPrint(text3, font, 100, 150, 210, sf::Color::Blue, sf::Color::White, msgStr);
-
-	text1.setOrigin(400.0f, 400.0f);
-	text1.setPosition(text1.getOrigin());
-
-	sf::RectangleShape rect_shape(sf::Vector2f{ 200.0f, 200.0f });
-	sf::RectangleShape rect_player;
-	std::vector<sf::CircleShape> enemies;
-	sf::CircleShape enemy_circle;
-
-	rect_player.setSize(sf::Vector2f{ 15.0f, 15.0f });
-	rect_player.setOutlineColor(sf::Color::Green);
-	rect_player.setOutlineThickness(2.0f);
-	rect_player.setPosition(sf::Vector2f{ 150.0f, 400.0f });
-
-	for (int i = 0; i < MAX_ENEMY_COUNT; i++)
-	{
-		enemy_circle.setRadius(rand_number(25));
-		enemy_circle.setOutlineColor(sf::Color::Red);
-		enemy_circle.setOutlineThickness(5.0f);
-		enemy_circle.setPosition(rand_number(500), recty_n);
-		sf::Vector2f rpos = enemy_circle.getPosition();
-		enemies.push_back(enemy_circle);
+		cout << "loadFromeFile err" << endl;
+		return - 1;
 	}
 
 
-
-
-	sf::RectangleShape small_rect_shape;
-
-	rect_shape.setFillColor(sf::Color::Green);
-	rect_shape.setOutlineColor(sf::Color::Red);
-	rect_shape.setOutlineThickness(20.0f);
-	rect_shape.setPosition(x, y);
-
-	small_rect_shape.setSize(sf::Vector2f{10.0f, 10.0f});
-	small_rect_shape.setFillColor(sf::Color::Yellow);
-	small_rect_shape.setOutlineColor(sf::Color::Blue);
-	small_rect_shape.setOutlineThickness(20.0f);
-	small_rect_shape.setPosition(x, y);
-	for (int i = 0; i < 5; i++)
+	if (font_level.loadFromFile("../resources/font/BinggraeMelona.ttf") == false)
 	{
+		cout << "loadFromeFile err" << endl;
+		return - 1;
 	}
 
-
-	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML Works");
-	window.setFramerateLimit(30);
-
-
-	while (window.isOpen())
+	if (font_message.loadFromFile("../resources/font/DS-DIGIB.ttf") == false)
 	{
-		// cycling time and elapsed time 
+		cout << "loadFromeFile err" << endl;
+		return - 1;
+	}
+
+	//Set logo
+	sprite_start_logo.setTexture(tex_color_off);
+	sprite_start_logo.setOrigin(sf::Vector2f(tex_color_off.getSize()) / 2.f);
+	sprite_start_logo.setPosition(sprite_start_logo.getOrigin());
+
+
+	print_text(text_level, font_level, 30, 10.f, 10.f,
+		Color::White, Color::White, level_string);
+	print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
+		Color::White, Color::White, message_string);
+
+	//Init. Color pad & Color grid
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			sprite_off[n].setTexture(tex_color_off);
+			sprite_off[n].setTextureRect(IntRect(j * KEYPAD_BTN_WIDTH, i * KEYPAD_BTN_HEIGHT,
+				KEYPAD_BTN_WIDTH, KEYPAD_BTN_HEIGHT));
+			color_grid[i][j] = n;
+
+			sprite_on[n].setTexture(tex_color_on);
+			sprite_on[n].setTextureRect(IntRect(j * KEYPAD_BTN_WIDTH, i * KEYPAD_BTN_HEIGHT,
+				KEYPAD_BTN_WIDTH, KEYPAD_BTN_HEIGHT));
+			n++;
+		}
+	}
+
+	generate_random_number();
+
+	while (app.isOpen())
+	{
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
-		interval += time;
-		timer += time;
-		
-		// event processor
-		sf::Event event;
+		number_order += time;
+		game_start += time;
+		ready += time;
+		rotate_time += time;
 
-		// window close event process
-		while (window.pollEvent(event))
+		Event event;
+
+		while (app.pollEvent(event)) {
+			if (event.type == Event::EventType::Closed)
+				app.close();
+		}
+
+		if (event.type == Event::MouseButtonPressed)
 		{
-			if (event.type == sf::Event::EventType::Closed)
+			if (event.key.code == Mouse::Left)
 			{
-				window.close();
-				std::cout << "프로그램이 종료되었습니다." << std::endl;
-			}
+				if (isgamestart == true)
+				{
+					Vector2i pos = Mouse::getPosition(app);
+					x = (pos.y - KEYPAD_START_Y) / KEYPAD_BTN_HEIGHT;
+					y = (pos.x - KEYPAD_START_X) / KEYPAD_BTN_WIDTH;
+					n = color_grid[x][y];
+					cout << "[USER]Pressed:: x=" << y << " y = " << x << " n=" << n << endl;
 
-			// key pressed
-			if (event.type == sf::Event::KeyPressed)
-			{
-				switch (event.key.code)
-				{
-				case sf::Keyboard::Left:
-				{
-					x -= 10;
-					break;
-				}
-				case sf::Keyboard::Right:
-				{
-					x += 10;
-					break;
-				}
-				case sf::Keyboard::Up:
-				{
-					y -= 10;
-					break;
-				}
-				case sf::Keyboard::Down:
-				{
-					y += 10;
-					break;
-				}
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-					rect_player.move(-MOVE_PIXEL, 0);
+					//Save input numbers
+					if (input_numbers.length() < level)
+						input_numbers += to_string(n);
 
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-					rect_player.move(+MOVE_PIXEL, 0);
-				
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-					rect_player.move(0, -MOVE_PIXEL);
-				
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-					rect_player.move(0, +MOVE_PIXEL);
-				
-				/*
-				if (event.key.code == sf::Keyboard::Space)
-				{
-					float speed = 3.0f;
-					for (int i = 0; i < 50; i += speed)
-					{
-						small_rect_shape[0].move(speed * 1, speed*1);
-						window.draw(small_rect_shape[0]);
-						window.display();
+					//Pressed effect
+					for (int i = 0; i < 10; i++) {
+						sprite_on[n].setPosition(
+							(float)((y)*KEYPAD_BTN_WIDTH) + KEYPAD_START_X,
+							(float)KEYPAD_START_Y + ((x)*KEYPAD_BTN_HEIGHT));
+
+						app.draw(sprite_on[n]);
+						app.display();
 					}
-					small_rect_shape[0].setPosition(sf::Vector2f{ (float)x, (float)y });
-					break;
 				}
-				*/
-				
 			}
+			else //Pressed Mouse right button
+				isgamestart = true;
+		}
 
-
-
-			// mouse press event process
-			if (event.type == sf::Event::MouseButtonPressed)
+		if (input_numbers.length() == level)
+		{
+			if (com_numbers == input_numbers)
 			{
-				switch (event.key.code)
-				{
-				case sf::Mouse::Left:
-				{
-					circle_shape.setFillColor(sf::Color::Yellow);
-					sf::Vector2i pos = sf::Mouse::getPosition(window);
-					rect_shape.setOrigin(sf::Vector2f{ (float)pos.x, (float)pos.y});
-					std::cout << "왼쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-					break;
-				}
-				case sf::Mouse::Right:
-				{
-					circle_shape.setFillColor(sf::Color::Magenta);
-					sf::Vector2i pos = sf::Mouse::getPosition(window);
-					float x_f = (float)pos.x + CIRCLE_RADIUS;
-					float y_f = (float)pos.y + CIRCLE_RADIUS;
-					circle_shape.setPosition(sf::Vector2f{ x_f, y_f });
-					std::cout << "오른쪽버튼 눌림 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-					break;
-				}
+				input_numbers.clear();
+				level++;
+
+				level_string = "Level : " + to_string(level) + " | Correct :)";
+				print_text(text_level, font_level, 30, 10.f, 10.f,
+					Color::White, Color::White, level_string);
+			}
+			else {
+				level_string = "Level : " + to_string(level) + " | Wrong :(";
+				print_text(text_level, font_level, 30, 10.f, 10.f,
+					Color::White, Color::White, level_string);
+
+				input_numbers.clear();
+			}
+
+			generate_random_number();
+
+			game_start = 0;
+			levelLoop = 0;
+			clock.restart();
+			number_order += time;
+		}
+
+		app.clear(Color::White);
+
+		if (isgamestart == false)
+		{
+			sprite_start_logo.setRotation(rotate_time * 100);
+			app.draw(sprite_start_logo);
+
+			level_string = "Press Mouse Right button to start.";
+			print_text(text_message, font_message, 30, 10.f, TEXT_MSG_Y,
+				Color::White, Color::White, level_string);
+
+			game_start = 0;
+			number_order = 0;
+		}
+		else {
+			//draw color grid
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					int n = color_grid[i][j];
+					sprite_off[n].setPosition(
+						(float)j * KEYPAD_BTN_WIDTH + KEYPAD_START_X,
+						(float)KEYPAD_START_Y + (i * KEYPAD_BTN_HEIGHT));
+					app.draw(sprite_off[n]);
 				}
 			}
 
-			// mouse release event
-			if (event.type == sf::Event::MouseButtonReleased)
+		//Remove "Ready, Go ! message after 2 seconds
+		if (ready > delay_ready) {
+			print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
+				Color::White, Color::White, "");
+		}
+
+		//Game Start after 3.0 seconds
+		if (game_start > delay_game_start)
+		{
+			//Show the sprite_on image every 1 second each color
+			if (number_order > delay_number_order)
 			{
-				switch (event.key.code)
+				if (levelLoop < level)
 				{
-				case sf::Mouse::Left:
-				{
-					circle_shape.setFillColor(sf::Color::Green);
-					sf::Vector2i pos = sf::Mouse::getPosition(window);
-					float x_f = (float)pos.x - CIRCLE_RADIUS;
-					float y_f = (float)pos.y - CIRCLE_RADIUS;
-					circle_shape.setPosition(sf::Vector2f{x_f, y_f});
-					std::cout << "왼쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-					break;
+					index = (com_numbers.at(levelLoop)) - '0';
+					cout << "[ COM]Pressed idx = " << index << endl;
+					switch (index)
+					{
+						case 0: xx = 0; yy = 0; break;
+						case 1: xx = 1; yy = 0; break;
+						case 2: xx = 0; yy = 1; break;
+						case 3: xx = 1; yy = 1; break;
+					}
+
+					//Press effect
+					for (int i = 0; i < 15; i++)
+					{
+						sprite_on[index].setPosition(
+							(float)((xx)*KEYPAD_BTN_WIDTH) + KEYPAD_START_X,
+							(float)KEYPAD_START_Y + ((yy)*KEYPAD_BTN_HEIGHT));
+						app.draw(sprite_on[index]);
+						app.display();
+					}
+
+					levelLoop++;
 				}
-				case sf::Mouse::Right:
-				{
-					circle_shape.setFillColor(sf::Color::Green);
-					sf::Vector2i pos = sf::Mouse::getPosition(window);
-					std::cout << "오른쪽버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-					break;
-				}
-				case sf::Mouse::Middle:
-				{
-					circle_shape.setFillColor(sf::Color::Green);
-					sf::Vector2i pos = sf::Mouse::getPosition(window);
-					std::cout << "중간버튼 뗌 : pos.x = " << pos.x << " pos.y : " << pos.y << std::endl;
-					break;
-				}
-				}
+				number_order = 0;
 			}
 		}
-
-
-
-
-		/*
-
-		// ai_time period action (current 0.5sec)
-		if (ai_Timer.getElapsedTime() > ai_time)
-		{
-			ai_Timer.restart();
-			std::cout << "ai_Timer..." << interval << std::endl;
 		}
-
-		// delay1 time period action (current 4sec)
-		if (interval > delay1 )
-		{
-			ai_Timer.restart();
-			std::cout << "interval = " << interval << " count : " << count << std::endl;
-
-			interval = 0;
-			count++;
-		}
-		
-
-		// interval 
-		if (((int)interval % 2) == 0)
-		{
-			window.clear(sf::Color::Black);
-			x += 1.0;
-			y += 1.0;
-			text1.setPosition(x, y);
-			window.draw(text1);
-			window.draw(text2);
-			window.draw(text3);
-
-			// window.draw(rectangle);
-			// window.draw(sprite_on);
-			if (x > 800) { x = 0, y = 0; }
-		}
-		else
-		{
-			window.clear(sf::Color::Black);
-			window.draw(sprite_off);
-		}
-		
-		if (((int)interval % 5) == 0)
-		{
-			std::cout << "interval = " << interval << std::endl;
-			play_sound_detail("../resources/music/BabyElephantWalk60.wav");
-
-			std::cout << "resources/music/BabyElephantWalk60.wav" << std::endl;
-			sound.play();
-		}
-		*/
-		//배경화면을 흰색으로 clear
-		window.clear(sf::Color::Black);
-		if ((int)interval % 1 == 0)
-		{
-			std::vector<sf::CircleShape>::iterator iter;
-			for (iter = enemies.begin(); iter != enemies.end(); iter++)
-			{
-				(*iter).move(0, rand_number(3));
-				sf::Vector2f pos = (*iter).getPosition();
-				if (pos.y > 500)
-					(*iter).setPosition(rand_number(400), recty_n);
-			}
-		}
-
-		std::vector<sf::CircleShape>::iterator iter;
-		for (int i = 0; i < enemies.size(); i++)
-		{
-			if ((enemies[i].getGlobalBounds()).intersects(rect_player.getGlobalBounds()))
-			{
-				enemies.erase(enemies.begin() + i);
-				std::cout << i << " 번째 상자와 충돌 발생!" << std::endl;
-			}
-		}
-
-		for (iter = enemies.begin(); iter != enemies.end(); iter++)
-			window.draw(*iter);
-		window.draw(rect_player);
-		window.display();
-
-		if (enemies.size() == 0)
-		{
-			window.close();
-			break;
-		}
-		/*
-		//rect_shape 위치 보정
-		rect_shape.setPosition(sf::Vector2f( (float)x + 100.0f, y + 100.f));
-		window.draw(rect_shape);
-
-
-		//텍스트 이동
-		text1.move(1.f, 1.f);
-
-		//글자 위치 재설정
-		if (text1.getPosition().x == 1000 || text1.getPosition().y == 1000)
-			text1.setPosition(10, 10);
-
-		//타이머에 맞춰 글자 크기를 확대
-		text1.setScale(timer * 1.5f, timer * 1.2f);
-
-		//글자 크기 재설정
-		if (text1.getScale().x == 100 || text1.getScale().y == 100)
-			text1.setScale(1.0f, 1.0f);
-
-
-		//글자 로테이션 설정
-		text3.setRotation(timer * 100);
-		window.draw(text3);
-
-		/*
-		//작은 사각형 이동
-		for (int i = 0; i < 5; i++)
-		{
-			small_rect_shape[i].move(0, 5.f);
-
-			if (small_rect_shape[i].getPosition().y == 1000)
-				small_rect_shape[i].setPosition(x + ((i + 1) * 100), y);
-
-			window.draw(small_rect_shape[i]);
-		}
-		*/
-		//큰 사각형 로테이션
-		/*
-		for (int i = 0; i < 20; i++)
-		{
-			window.draw(rect_shape);
-			//rect_shape.setRotation(timer * 1.5f);
-			//window.draw(rect_shape);
-
-		}
-		*/
-		/*
-		rect_shape.setRotation(timer * 15.0f);
-		rect_shape.setPosition({ (float)(rand() % 200), (float)(rand() % 200) });
-
-
-		//약 5초 후에는 타이머 재설정
-		if (timer > 15)
-			timer = 0;
-		std::cout << "timerRotate = " << timer << std::endl;
-
-		//프레임을 스크린에 출력
-		//window.display();
-	
-
-		//window.clear(sf::Color::White);
-		//circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
-		//window.draw(circle_shape);
-		window.display();
-		*/
+		app.draw(text_level);
+		app.draw(text_message);
+		app.display();
 	}
+
 	return 0;
 }
