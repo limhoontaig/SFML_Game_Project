@@ -60,46 +60,46 @@ int main()
 
 	Clock clock;
 
-	float number_order = 0, delay_number_order = 1.5; //inerval for show each color
-	float game_start = 0, delay_game_start = 3.0; //wait for game start
-	float ready = 0, delay_ready = 2.0; //Show "Ready, Go" message for 2 seconds
-	float rotate_time = 0;
+	float number_order = 0, delay_number_order = 1.5; //inerval for show each color
+	float game_start = 0, delay_game_start = 3.0; //wait for game start
+	float ready = 0, delay_ready = 2.0; //Show "Ready, Go" message for 2 seconds
+	float rotate_time = 0;   
 
-	string level_string = "Level : " + to_string(level);
-	string message_string = "Ready, Go!";
+	string level_string = "Level : " + to_string(level);
+	string message_string = "Ready, Go!";
 	bool isgamestart = false;
 	int index = 0;
 
-	RenderWindow app(VideoMode(504, 504), "Remember It - https://maincodes.tistory.com/");
+	RenderWindow app(VideoMode(504, 504), "Remember It - https://maincodes.tistory.com/");
 	app.setFramerateLimit(60);
 
-	//Load resources from files
+	//Load resources from files
 	if (tex_color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
 	if (tex_color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
 
 	if (font_level.loadFromFile("../resources/font/BinggraeMelona.ttf") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
 	if (font_message.loadFromFile("../resources/font/DS-DIGIB.ttf") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
-	//Set logo
+	//Set logo
 	sprite_start_logo.setTexture(tex_color_off);
 	sprite_start_logo.setOrigin(sf::Vector2f(tex_color_off.getSize()) / 2.f);
 	sprite_start_logo.setPosition(sprite_start_logo.getOrigin());
@@ -110,7 +110,7 @@ int main()
 	print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
 		Color::White, Color::White, message_string);
 
-	//Init. Color pad & Color grid
+	//Init. Color pad & Color grid
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 2; j++)
@@ -155,13 +155,13 @@ int main()
 					x = (pos.y - KEYPAD_START_Y) / KEYPAD_BTN_HEIGHT;
 					y = (pos.x - KEYPAD_START_X) / KEYPAD_BTN_WIDTH;
 					n = color_grid[x][y];
-					cout << "[USER]Pressed:: x=" << y << " y = " << x << " n=" << n << endl;
+					cout << "[USER]Pressed:: x=" << y << " y = " << x << " n=" << n << endl;
 
-					//Save input numbers
+					//Save input numbers
 					if (input_numbers.length() < level)
 						input_numbers += to_string(n);
 
-					//Pressed effect
+					//Pressed effect
 					for (int i = 0; i < 10; i++) {
 						sprite_on[n].setPosition(
 							(float)((y)*KEYPAD_BTN_WIDTH) + KEYPAD_START_X,
@@ -172,7 +172,7 @@ int main()
 					}
 				}
 			}
-			else //Pressed Mouse right button
+			else //Pressed Mouse right button
 				isgamestart = true;
 		}
 
@@ -183,13 +183,13 @@ int main()
 				input_numbers.clear();
 				level++;
 
-				level_string = "Level : " + to_string(level) + " | Correct :)";
+				level_string = "Level : " + to_string(level) + " | Correct :)";
 				print_text(text_level, font_level, 30, 10.f, 10.f,
 					Color::White, Color::White, level_string);
 			}
 			else {
 
-				level_string = "Level : " + to_string(level) + " | Wrong :(";
+				level_string = "Level : " + to_string(level) + " | Wrong :(";
 				print_text(text_level, font_level, 30, 10.f, 10.f,
 					Color::White, Color::White, level_string);
 				input_numbers.clear();
@@ -218,7 +218,7 @@ int main()
 			number_order = 0;
 		}
 		else {
-			//draw color grid
+			//draw color grid
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 2; j++) {
 					int n = color_grid[i][j];
@@ -229,22 +229,22 @@ int main()
 				}
 			}
 
-		//Remove "Ready, Go ! message after 2 seconds
+		//Remove "Ready, Go ! message after 2 seconds
 		if (ready > delay_ready) {
 			print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
 				Color::Red, Color::Red, "");
 		}
 
-		//Game Start after 3.0 seconds
+		//Game Start after 3.0 seconds
 		if (game_start > delay_game_start)
 		{
-			//Show the sprite_on image every 1 second each color
+			//Show the sprite_on image every 1 second each color
 			if (number_order > delay_number_order)
 			{
 				if (levelLoop < level)
 				{
 					index = (com_numbers.at(levelLoop)) - '0';
-					cout << "[ COM]Pressed idx = " << index << endl;
+					cout << "[ COM]Pressed idx = " << index << endl;
 					switch (index)
 					{
 						case 0: xx = 0; yy = 0; break;
@@ -253,7 +253,7 @@ int main()
 						case 3: xx = 1; yy = 1; break;
 					}
 
-					//Press effect
+					//Press effect
 					for (int i = 0; i < 15; i++)
 					{
 						sprite_on[index].setPosition(
