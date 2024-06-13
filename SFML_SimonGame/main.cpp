@@ -389,11 +389,24 @@ int main()
 		std::vector<sf::CircleShape>::iterator iter;
 		for (int i = 0; i < enemies.size(); i++)
 		{
-			if ((enemies[i].getGlobalBounds))
+			if ((enemies[i].getGlobalBounds()).intersects(rect_player.getGlobalBounds()))
+			{
+				enemies.erase(enemies.begin() + i);
+				std::cout << i << " 번째 상자와 충돌 발생!" << std::endl;
+			}
 		}
 
+		for (iter = enemies.begin(); iter != enemies.end(); iter++)
+			window.draw(*iter);
+		window.draw(rect_player);
+		window.display();
 
-
+		if (enemies.size() == 0)
+		{
+			window.close();
+			break;
+		}
+		/*
 		//rect_shape 위치 보정
 		rect_shape.setPosition(sf::Vector2f( (float)x + 100.0f, y + 100.f));
 		window.draw(rect_shape);
@@ -440,6 +453,7 @@ int main()
 
 		}
 		*/
+		/*
 		rect_shape.setRotation(timer * 15.0f);
 		rect_shape.setPosition({ (float)(rand() % 200), (float)(rand() % 200) });
 
@@ -457,6 +471,7 @@ int main()
 		//circle_shape.setPosition(sf::Vector2f{ x + 100.0f, y + 100.0f });
 		//window.draw(circle_shape);
 		window.display();
+		*/
 	}
 	return 0;
 }
