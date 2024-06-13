@@ -15,24 +15,23 @@ using namespace sf;
 string com_numbers = "";
 int level = 1;
 
-//Generate random number
+//Generate random number
 int generate_random_number()
 {
 	com_numbers.clear();
 	srand((unsigned int)time(NULL));
 	for (int i = 0; i < level; i++)
 		com_numbers += to_string(rand() % 4);
-
+	
 	#if 0
-		cout  << "-----------------------------------------" << endl;
-	cout  << "[ COM]Level:" << level  << " Random Number:" << comNumbers  << endl;
-	cout  << "-----------------------------------------" << endl;
-#endif
-
+		cout << "-----------------------------------------" << endl;
+		cout << "[ COM]Level:" << level << " Random Number:" << comNumbers << endl;
+		cout << "-----------------------------------------" << endl;
+	#endif
 	return 0;
 }
 
-// function for display text
+// function for display text
 int print_text(Text& textMsg, Font& font, int size,
 	float x, float y, const Color& color, const Color& outColor, string p)
 {
@@ -42,7 +41,6 @@ int print_text(Text& textMsg, Font& font, int size,
 	textMsg.setFillColor(color);
 	textMsg.setOutlineColor(outColor);
 	textMsg.setString(p);
-
 	return 0;
 }
 
@@ -190,10 +188,10 @@ int main()
 					Color::White, Color::White, level_string);
 			}
 			else {
+
 				level_string = "Level : " + to_string(level) + " | Wrong :(";
 				print_text(text_level, font_level, 30, 10.f, 10.f,
 					Color::White, Color::White, level_string);
-
 				input_numbers.clear();
 			}
 
@@ -209,12 +207,12 @@ int main()
 
 		if (isgamestart == false)
 		{
-			sprite_start_logo.setRotation(rotate_time * 100);
+			//sprite_start_logo.setRotation(rotate_time * 1000);
 			app.draw(sprite_start_logo);
 
-			level_string = "Press Mouse Right button to start.";
+			level_string = "Press Mouse Right button to start.";
 			print_text(text_message, font_message, 30, 10.f, TEXT_MSG_Y,
-				Color::White, Color::White, level_string);
+				Color::Red, Color::Green, level_string);
 
 			game_start = 0;
 			number_order = 0;
@@ -234,7 +232,7 @@ int main()
 		//Remove "Ready, Go ! message after 2 seconds
 		if (ready > delay_ready) {
 			print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
-				Color::White, Color::White, "");
+				Color::Red, Color::Red, "");
 		}
 
 		//Game Start after 3.0 seconds
