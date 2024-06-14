@@ -74,28 +74,30 @@ int main()
 	app.setFramerateLimit(60);
 
 	//Load resources from files
-	if (tex_color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png") == false)
+	if (tex_color_off.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png", IntRect(0,0,40,40)) == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		std::cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
-
-	if (tex_color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png") == false)
+	Vector2u tex_color_off_size = tex_color_off.getSize();
+	std::cout << "tex_color_off_size.x = " << tex_color_off_size.x << "tex_color_off_size.y = " << tex_color_off_size.y << endl;
+	if (tex_color_on.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Characters.png", IntRect(0,0,40,40)) == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		std::cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
-
+	Vector2u tex_color_on_size = tex_color_on.getSize();
+	std::cout << "tex_color_on_size.x = " << tex_color_on_size.x << "tex_color_size.y = " << tex_color_on_size.y << endl;
 
 	if (font_level.loadFromFile("../resources/font/BinggraeMelona.ttf") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		std::cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
 	if (font_message.loadFromFile("../resources/font/DS-DIGIB.ttf") == false)
 	{
-		cout << "loadFromeFile err" << endl;
+		std::cout << "loadFromeFile err" << endl;
 		return - 1;
 	}
 
@@ -155,7 +157,7 @@ int main()
 					x = (pos.y - KEYPAD_START_Y) / KEYPAD_BTN_HEIGHT;
 					y = (pos.x - KEYPAD_START_X) / KEYPAD_BTN_WIDTH;
 					n = color_grid[x][y];
-					cout << "[USER]Pressed:: x=" << y << " y = " << x << " n=" << n << endl;
+					std::cout << "[USER]Pressed:: x=" << y << " y = " << x << " n=" << n << endl;
 
 					//Save input numbers
 					if (input_numbers.length() < level)
@@ -244,7 +246,7 @@ int main()
 				if (levelLoop < level)
 				{
 					index = (com_numbers.at(levelLoop)) - '0';
-					cout << "[ COM]Pressed idx = " << index << endl;
+					std::cout << "[COM]Pressed idx = " << index << endl;
 					switch (index)
 					{
 						case 0: xx = 0; yy = 0; break;
