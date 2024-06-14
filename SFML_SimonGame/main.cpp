@@ -104,13 +104,15 @@ int main()
 	//Set logo
 	sprite_start_logo.setTexture(tex_color_off);
 	sprite_start_logo.setOrigin(sf::Vector2f(tex_color_off.getSize()) / 2.f);
+	sprite_start_logo.setScale(sf::Vector2f(15.0f, 15.0f));
+	
 	sprite_start_logo.setPosition(sprite_start_logo.getOrigin());
 
 
 	print_text(text_level, font_level, 30, 10.f, 10.f,
-		Color::White, Color::White, level_string);
+		Color::Green, Color::Red, level_string);
 	print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
-		Color::White, Color::White, message_string);
+		Color::Blue, Color::Red, message_string);
 
 	//Init. Color pad & Color grid
 	for (int i = 0; i < 2; i++)
@@ -187,13 +189,13 @@ int main()
 
 				level_string = "Level : " + to_string(level) + " | Correct :)";
 				print_text(text_level, font_level, 30, 10.f, 10.f,
-					Color::White, Color::White, level_string);
+					Color::Red, Color::Red, level_string);
 			}
 			else {
 
 				level_string = "Level : " + to_string(level) + " | Wrong :(";
 				print_text(text_level, font_level, 30, 10.f, 10.f,
-					Color::White, Color::White, level_string);
+					Color::Red, Color::Red, level_string);
 				input_numbers.clear();
 			}
 
@@ -234,7 +236,7 @@ int main()
 		//Remove "Ready, Go ! message after 2 seconds
 		if (ready > delay_ready) {
 			print_text(text_message, font_message, 30, TEXT_MSG_X, TEXT_MSG_Y,
-				Color::Red, Color::Red, "");
+				Color::Red, Color::Red, "");// "Ready Go!!!");
 		}
 
 		//Game Start after 3.0 seconds
