@@ -203,7 +203,7 @@ int main()
 			number_order += time;
 		}
 
-		app.clear(Color::White);
+		app.clear(Color::Black);
 
 		if (isgamestart == false)
 		{
